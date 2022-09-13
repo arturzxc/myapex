@@ -92,17 +92,17 @@ public:
         std::string str;
         str += "LocalPlayer:\n";
         str += "\tBasePointer:\t\t\t" + utils::convertPointerToHexString(getBasePointer()) + "\n";
-        str += "\tLocationOriginX:\t\t" + utils::tStringWithPrecission(getLocationOriginX()) + "\n";
-        str += "\tLocationOriginY:\t\t" + utils::tStringWithPrecission(getLocationOriginY()) + "\n";
-        str += "\tLocationOriginZ:\t\t" + utils::tStringWithPrecission(getLocationOriginZ()) + "\n";
-        str += "\tTeamNumber:\t\t\t" + utils::tStringWithPrecission(getTeamNumber()) + "\n";
+        str += "\tLocationOriginX:\t\t" + utils::convertNumberToString(getLocationOriginX()) + "\n";
+        str += "\tLocationOriginY:\t\t" + utils::convertNumberToString(getLocationOriginY()) + "\n";
+        str += "\tLocationOriginZ:\t\t" + utils::convertNumberToString(getLocationOriginZ()) + "\n";
+        str += "\tTeamNumber:\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
         str += "\tName:\t\t\t\t" + getName() + "\n";
-        str += "\tLifeState:\t\t\t" + utils::tStringWithPrecission(getLifeState()) + "\n";
-        str += "\tPunchWeaponAngleX:\t\t" + utils::tStringWithPrecission(getPunchWeaponAngleX()) + "\n";
-        str += "\tPunchWeaponAngleY:\t\t" + utils::tStringWithPrecission(getPunchWeaponAngleY()) + "\n";
-        str += "\tViewAngleX:\t\t\t" + utils::tStringWithPrecission(getViewAngleX()) + "\n";
-        str += "\tViewAngleY:\t\t\t" + utils::tStringWithPrecission(getViewAngleY()) + "\n";
-        str += "\tBleedoutState:\t\t\t" + utils::tStringWithPrecission(getBleedoutState()) + "\n";
+        str += "\tLifeState:\t\t\t" + utils::convertNumberToString(getLifeState()) + "\n";
+        str += "\tPunchWeaponAngleX:\t\t" + utils::convertNumberToString(getPunchWeaponAngleX()) + "\n";
+        str += "\tPunchWeaponAngleY:\t\t" + utils::convertNumberToString(getPunchWeaponAngleY()) + "\n";
+        str += "\tViewAngleX:\t\t\t" + utils::convertNumberToString(getViewAngleX()) + "\n";
+        str += "\tViewAngleY:\t\t\t" + utils::convertNumberToString(getViewAngleY()) + "\n";
+        str += "\tBleedoutState:\t\t\t" + utils::convertNumberToString(getBleedoutState()) + "\n";
         std::cout << str;
     }
 };

@@ -117,7 +117,7 @@ namespace utils
     }
 
     template <typename T>
-    std::string tStringWithPrecission(const T a_value)
+    std::string convertNumberToString(const T a_value)
     {
         std::ostringstream out;
         out.precision(6);
