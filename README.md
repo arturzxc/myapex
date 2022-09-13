@@ -1,6 +1,12 @@
-# myapex
+# MyApex
 Simple C++ cheats for Apex Legends.
-
-<h1>How to run</h1>
+***
+## How to run
 <p>Compile the code: g++ Main.cpp</p>
-<p>Run the compiled code: ./a.out</p>
+```
+g++ Main.cpp
+```
+<p>Run the compiled code</p>
+```
+sudo ./a.out
+```
