@@ -78,6 +78,12 @@ public:
         float result = utils::ReadFloat(ptrLong);
         return result;
     }
+    void setViewAngleX(float angle)
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::VIEW_ANGLE;
+        utils::WriteFloat(ptrLong, angle);
+    }
     float getViewAngleY()
     {
         long basePointer = getBasePointer();

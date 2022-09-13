@@ -14,14 +14,15 @@ int main()
     level->print();
 
     LocalPlayer *localPlayer = new LocalPlayer();
+    localPlayer->setViewAngleX(0);
     localPlayer->print();
 
-    for (int i = 0; i < 6; i++)
-    {
-        Player *player = new Player(i);
-        player->print();
-        delete player;
-    }
+    // for (int i = 0; i < 6; i++)
+    // {
+    //     Player *player = new Player(i);
+    //     player->print();
+    //     delete player;
+    // }
 
     delete localPlayer;
     delete level;

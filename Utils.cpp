@@ -49,12 +49,37 @@ namespace utils
             return false;
         return false; // Partial read, data might be corrupted
     }
+    bool Write(long address, void *pBuff, size_t size)
+    {
+        if (size == 0)
+            return false;
+        void *pAddress = (void *)address;
+        pid_t pid = GetPID();
+        struct iovec iovLocalAddressSpace[1]{0};
+        struct iovec iovRemoteAddressSpace[1]{0};
+        iovLocalAddressSpace[0].iov_base = pBuff;     // Store data in this buffer
+        iovLocalAddressSpace[0].iov_len = size;       // which has this size.
+        iovRemoteAddressSpace[0].iov_base = pAddress; // The data will be writted here
+        iovRemoteAddressSpace[0].iov_len = size;      // and has this size.
+        ssize_t sSize = process_vm_writev(
+            pid,                   // Remote process id
+            iovLocalAddressSpace,  // Local iovec array
+            1,                     // Size of the local iovec array
+            iovRemoteAddressSpace, // Remote iovec array
+            1,                     // Size of the remote iovec array
+            0);                    // Flags, unused
+        if (sSize == (ssize_t)size)
+            return true;
+        else if (sSize == 0)
+            return false;
+        return false; // Partial read, data might be corrupted
+    }
     std::string ReadString(long address)
     {
         int size = sizeof(std::string);
         char buffer[size] = {0};
-        bool memReadSuccess = utils::Read(address, &buffer, size);
-        if (!memReadSuccess)
+        bool success = utils::Read(address, &buffer, size);
+        if (!success)
             throw new std::invalid_argument("Failed to read String at address: " + address);
         return std::string(buffer);
     }
@@ -62,37 +87,69 @@ namespace utils
     {
         int size = sizeof(short);
         short buffer;
-        bool memReadSuccess = utils::Read(address, &buffer, size);
-        if (!memReadSuccess)
+        bool success = utils::Read(address, &buffer, size);
+        if (!success)
             throw new std::invalid_argument("Failed to read short at address: " + address);
         return buffer;
+    }
+    void WriteShort(long address, short num)
+    {
+        int size = sizeof(short);
+        short buffer = num;
+        bool success = utils::Write(address, &buffer, size);
+        if (!success)
+            throw new std::invalid_argument("Failed to write short at address: " + address);
     }
     int ReadInt(long address)
     {
         int size = sizeof(int);
         int buffer;
-        bool memReadSuccess = utils::Read(address, &buffer, size);
-        if (!memReadSuccess)
+        bool success = utils::Read(address, &buffer, size);
+        if (!success)
             throw new std::invalid_argument("Failed to read int at address: " + address);
         return buffer;
+    }
+    void WriteInt(long address, int num)
+    {
+        int size = sizeof(int);
+        int buffer = num;
+        bool success = utils::Write(address, &buffer, size);
+        if (!success)
+            throw new std::invalid_argument("Failed to write int at address: " + address);
     }
     long ReadFloat(long address)
     {
         int size = sizeof(float);
         float buffer;
-        bool memReadSuccess = utils::Read(address, &buffer, size);
-        if (!memReadSuccess)
+        bool success = utils::Read(address, &buffer, size);
+        if (!success)
             throw new std::invalid_argument("Failed to read float at address: " + address);
         return buffer;
+    }
+    void WriteFloat(long address, float num)
+    {
+        int size = sizeof(float);
+        float buffer = num;
+        bool success = utils::Write(address, &buffer, size);
+        if (!success)
+            throw new std::invalid_argument("Failed to write float at address: " + address);
     }
     long ReadLong(long address)
     {
         int size = sizeof(long);
         long buffer;
-        bool memReadSuccess = utils::Read(address, &buffer, size);
-        if (!memReadSuccess)
+        bool success = utils::Read(address, &buffer, size);
+        if (!success)
             throw new std::invalid_argument("Failed to read long at address: " + address);
         return buffer;
+    }
+    void WriteLong(long address, long num)
+    {
+        int size = sizeof(long);
+        long buffer = num;
+        bool success = utils::Write(address, &buffer, size);
+        if (!success)
+            throw new std::invalid_argument("Failed to write long at address: " + address);
     }
     void PrintPointer(std::string name, long pointerLong)
     {
