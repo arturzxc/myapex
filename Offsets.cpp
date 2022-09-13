@@ -7,11 +7,9 @@ namespace offsets
     const long LEVEL = 0x13a17b8;        // [Miscellaneous]  -> LevelName
     const long LOCAL_PLAYER = 0x1e25418; // [Miscellaneous]  -> LocalPlayer
     const long ENTITY_LIST = 0x1a75038;  // [Miscellaneous]  -> cl_entitylist
-
     // entity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long LOCAL_ORIGIN = 0x158; // [DataMap.CBaseViewModel]    -> m_localOrigin
-
     // player
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long GLOW_ENABLE = 0x3c8;             // [RecvTable.DT_HighlightSettings] -> m_highlightServerContextID + 0x8

@@ -7,13 +7,12 @@ namespace utils
 {
     void PrintTypeSizes()
     {
-        std::cout << "char size: " << sizeof(char) << "\n";     // 1
-        std::cout << "int size: " << sizeof(int) << "\n";       // 4
-        std::cout << "float size: " << sizeof(float) << "\n";   // 4
-        std::cout << "long size: " << sizeof(long) << "\n";     // 4
-        std::cout << "double size: " << sizeof(double) << "\n"; // 8
+        std::cout << "char size: " << sizeof(char) << "\n";
+        std::cout << "int size: " << sizeof(int) << "\n";
+        std::cout << "float size: " << sizeof(float) << "\n";
+        std::cout << "long size: " << sizeof(long) << "\n";
+        std::cout << "double size: " << sizeof(double) << "\n";
     }
-
     pid_t GetPID()
     {
         char buf[512];
@@ -25,7 +24,6 @@ namespace utils
             throw std::invalid_argument("game not found");
         return pid;
     }
-
     bool Read(long address, void *pBuff, size_t size)
     {
         if (size == 0)
@@ -51,7 +49,6 @@ namespace utils
             return false;
         return false; // Partial read, data might be corrupted
     }
-
     std::string ReadString(long address)
     {
         int size = sizeof(std::string);
@@ -61,7 +58,6 @@ namespace utils
             throw new std::invalid_argument("Failed to read String at address: " + address);
         return std::string(buffer);
     }
-
     short ReadShort(long address)
     {
         int size = sizeof(short);
@@ -71,7 +67,6 @@ namespace utils
             throw new std::invalid_argument("Failed to read short at address: " + address);
         return buffer;
     }
-
     int ReadInt(long address)
     {
         int size = sizeof(int);
@@ -81,7 +76,6 @@ namespace utils
             throw new std::invalid_argument("Failed to read int at address: " + address);
         return buffer;
     }
-
     long ReadFloat(long address)
     {
         int size = sizeof(float);
@@ -91,7 +85,6 @@ namespace utils
             throw new std::invalid_argument("Failed to read float at address: " + address);
         return buffer;
     }
-
     long ReadLong(long address)
     {
         int size = sizeof(long);
@@ -101,13 +94,11 @@ namespace utils
             throw new std::invalid_argument("Failed to read long at address: " + address);
         return buffer;
     }
-
     void PrintPointer(std::string name, long pointerLong)
     {
         std::string str;
         std::cout << name << ": 0x" << std::hex << pointerLong << "\n";
     }
-
     std::string convertPointerToHexString(long pointer)
     {
         std::stringstream stream;
@@ -115,7 +106,6 @@ namespace utils
         std::string result(stream.str());
         return result;
     }
-
     template <typename T>
     std::string convertNumberToString(const T a_value)
     {
