@@ -7,14 +7,6 @@
 namespace utils
 {
     const float WORLD_RATIO = 0.0254;
-    void PrintTypeSizes()
-    {
-        std::cout << "char size: " << sizeof(char) << "\n";
-        std::cout << "int size: " << sizeof(int) << "\n";
-        std::cout << "float size: " << sizeof(float) << "\n";
-        std::cout << "long size: " << sizeof(long) << "\n";
-        std::cout << "double size: " << sizeof(double) << "\n";
-    }
     pid_t GetPID()
     {
         char buf[512];
@@ -119,9 +111,9 @@ namespace utils
         if (!success)
             throw new std::invalid_argument("Failed to write int at address: " + address);
     }
-    long ReadFloat(long address)
+    float ReadFloat(long address)
     {
-        int size = sizeof(float);
+        int size = 4;
         float buffer;
         bool success = utils::Read(address, &buffer, size);
         if (!success)
@@ -130,7 +122,7 @@ namespace utils
     }
     void WriteFloat(long address, float num)
     {
-        int size = sizeof(float);
+        int size = 4;
         float buffer = num;
         bool success = utils::Write(address, &buffer, size);
         if (!success)

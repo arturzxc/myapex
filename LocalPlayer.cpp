@@ -26,14 +26,14 @@ public:
     float getLocationOriginY()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float);
+        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + 4;
         float result = utils::ReadFloat(ptrLong);
         return result;
     }
     float getLocationOriginZ()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float) + sizeof(float);
+        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + (4 * 2);
         float result = utils::ReadFloat(ptrLong);
         return result;
     }
@@ -58,17 +58,17 @@ public:
         short result = utils::ReadShort(ptrLong);
         return result;
     }
-    float getPunchWeaponAngleX()
+    float getVecPunchWeaponAngleX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE;
         float result = utils::ReadFloat(ptrLong);
         return result;
     }
-    float getPunchWeaponAngleY()
+    float getVecPunchWeaponAngleY()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE + sizeof(float);
+        long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE + 4;
         float result = utils::ReadFloat(ptrLong);
         return result;
     }
@@ -88,9 +88,15 @@ public:
     float getViewAngleY()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::VIEW_ANGLE + sizeof(float);
+        long ptrLong = basePointer + offsets::VIEW_ANGLE + 4;
         float result = utils::ReadFloat(ptrLong);
         return result;
+    }
+    void setViewAngleY(float angle)
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::VIEW_ANGLE + 4;
+        utils::WriteFloat(ptrLong, angle);
     }
     short getBleedoutState()
     {
@@ -117,8 +123,8 @@ public:
         std::cout << "\tTeamNumber:\t\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
         std::cout << "\tName:\t\t\t\t\t" + getName() + "\n";
         std::cout << "\tLifeState:\t\t\t\t" + utils::convertNumberToString(getLifeState()) + "\n";
-        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getPunchWeaponAngleX()) + "\n";
-        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getPunchWeaponAngleY()) + "\n";
+        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getVecPunchWeaponAngleX()) + "\n";
+        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getVecPunchWeaponAngleY()) + "\n";
         std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getViewAngleX()) + "\n";
         std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getViewAngleY()) + "\n";
         std::cout << "\tBleedoutState:\t\t\t\t" + utils::convertNumberToString(getBleedoutState()) + "\n";

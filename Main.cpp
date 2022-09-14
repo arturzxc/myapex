@@ -10,6 +10,7 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Sense.cpp"
+#include "NoRecoil.cpp"
 
 int main()
 {
@@ -26,7 +27,7 @@ int main()
         players->push_back(new Player(i));
     }
     Sense *sense = new Sense();
-    while (true)
+    while (1)
     {
         try
         {
@@ -34,8 +35,9 @@ int main()
         }
         catch (...)
         {
-            std::cout << "Sense error occured" << std::endl;
+            std::cout << "SENSE ERROR" << std::endl;
         }
+
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
