@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "Utils.cpp"
 #include "Offsets.cpp"
@@ -98,6 +99,13 @@ public:
         short result = utils::ReadShort(ptrLong);
         return result;
     }
+    short getZooming()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::ZOOMING;
+        short result = utils::ReadShort(ptrLong);
+        return result;
+    }
     void print()
     {
         std::cout << "LocalPlayer:\n";
@@ -114,5 +122,6 @@ public:
         std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getViewAngleX()) + "\n";
         std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getViewAngleY()) + "\n";
         std::cout << "\tBleedoutState:\t\t\t\t" + utils::convertNumberToString(getBleedoutState()) + "\n";
+        std::cout << "\tZooming:\t\t\t\t" + utils::convertNumberToString(getZooming()) + "\n";
     }
 };

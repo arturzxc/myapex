@@ -2,9 +2,11 @@
 #include <iostream>
 #include <sstream>
 #include <sys/uio.h>
+#include <math.h>
 
 namespace utils
 {
+    const float WORLD_RATIO = 0.0254;
     void PrintTypeSizes()
     {
         std::cout << "char size: " << sizeof(char) << "\n";
@@ -170,5 +172,21 @@ namespace utils
         out.precision(6);
         out << std::fixed << a_value;
         return out.str();
+    }
+    long calcDistance(int x1, int y1, int z1, int x2, int y2, int z2)
+    {
+        long dx = (x1 - x2) * WORLD_RATIO;
+        long dy = (y1 - y2) * WORLD_RATIO;
+        long dz = (z1 - z2) * WORLD_RATIO;
+        long distance = sqrt(pow(dx, 2) + pow(dy, 2));
+        return distance;
+    }
+    long calcDistanceSquared(int x1, int y1, int z1, int x2, int y2, int z2)
+    {
+        long dx = (x1 - x2) * WORLD_RATIO;
+        long dy = (y1 - y2) * WORLD_RATIO;
+        long dz = (z1 - z2) * WORLD_RATIO;
+        long distance = pow(dx, 2) + pow(dy, 2);
+        return distance;
     }
 }

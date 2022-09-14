@@ -1,30 +1,43 @@
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <thread>
+#include <unistd.h>
+#include <vector>
 #include "Utils.cpp"
 #include "Offsets.cpp"
 #include "Level.cpp"
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
+#include "Sense.cpp"
 
 int main()
 {
-    std::cout << "PID: " << std::dec << utils::GetPID() << std ::endl;
-
+    if (getuid())
+    {
+        std::cout << "You.must.be.ROOT!!!" << std ::endl;
+        return -1;
+    }
     Level *level = new Level();
-    level->print();
-
     LocalPlayer *localPlayer = new LocalPlayer();
-    localPlayer->setViewAngleX(0);
-    localPlayer->print();
+    std::vector<Player *> *players = new std::vector<Player *>;
+    for (int i = 0; i < 60; i++)
+    {
+        players->push_back(new Player(i));
+    }
+    Sense *sense = new Sense();
+    while (true)
+    {
+        try
+        {
+            sense->update(localPlayer, players);
+        }
+        catch (...)
+        {
+            std::cout << "Sense error occured" << std::endl;
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 
-    // for (int i = 0; i < 6; i++)
-    // {
-    //     Player *player = new Player(i);
-    //     player->print();
-    //     delete player;
-    // }
-
-    delete localPlayer;
-    delete level;
     return 0;
 }

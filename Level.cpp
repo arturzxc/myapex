@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "Utils.cpp"
 #include "Offsets.cpp"
@@ -20,8 +21,8 @@ public:
     {
         std::string str;
         str += "Level:\n";
-        str += "\tBasePointer:\t\t\t" + utils::convertPointerToHexString(getBasePointer()) + "\n";
-        str += "\tName:\t\t\t\t" + getName() + "\n";
+        str += "\tBasePointer:\t\t\t\t" + utils::convertPointerToHexString(getBasePointer()) + "\n";
+        str += "\tName:\t\t\t\t\t" + getName() + "\n";
         std::cout << str;
     }
 };

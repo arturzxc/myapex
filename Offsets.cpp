@@ -20,4 +20,5 @@ namespace offsets
     const long VEC_PUNCH_WEAPON_ANGLE = 0x23f8; // [DataMap.C_Player]               -> m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
     const long VIEW_ANGLE = 0x24e0;             // [DataMap.C_Player]               -> m_ammoPoolCapacity - 0x14
     const long BLEEDOUT_STATE = 0x2688;         // [RecvTable.DT_Player]            -> m_bleedoutState
+    const long ZOOMING = 0x1bc1;                // [RecvTable.DT_Player]            -> m_bZooming
 }

@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "Utils.cpp"
 #include "Offsets.cpp"
@@ -87,12 +88,24 @@ public:
         int result = utils::ReadInt(ptrLong);
         return result;
     }
+    void setGlowEnable(int glowEnable)
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::GLOW_ENABLE;
+        utils::WriteInt(ptrLong, glowEnable);
+    }
     int getGlowThroughWall()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
         int result = utils::ReadInt(ptrLong);
         return result;
+    }
+    void setGlowThroughWall(int glowThroughWall)
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
+        utils::WriteInt(ptrLong, glowThroughWall);
     }
     void print()
     {
