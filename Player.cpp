@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Utils.cpp"
 #include "Offsets.cpp"
+#include "Memory.cpp"
 
 class Player
 {

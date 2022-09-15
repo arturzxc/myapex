@@ -10,7 +10,6 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Sense.cpp"
-#include "NoRecoil.cpp"
 
 int main()
 {
