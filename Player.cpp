@@ -7,6 +7,7 @@ class Player
 {
 private:
     int m_entityListIndex;
+    float m_lastVisibleTime;
 
 public:
     Player(int entityListIndex)
@@ -21,21 +22,21 @@ public:
     }
     long getBasePointer()
     {
-        long basePointer = utils::ReadLong(getUnresolvedBasePointer());
+        long basePointer = mem::ReadLong(getUnresolvedBasePointer());
         return basePointer;
     }
     short getLifeState()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LIFE_STATE;
-        short result = utils::ReadShort(ptrLong);
+        short result = mem::ReadShort(ptrLong);
         return result;
     }
     std::string getName()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::NAME;
-        std::string result = utils::ReadString(ptrLong);
+        std::string result = mem::ReadString(ptrLong);
         return result;
     }
     bool isValid()
@@ -51,71 +52,84 @@ public:
         else if (getName().empty())
             return "Name is empty";
         else
-            return "";
+            return "Player is valid";
     }
     float getLocationOriginX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     float getLocationOriginY()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float);
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     float getLocationOriginZ()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float) + sizeof(float);
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     int getTeamNumber()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::TEAM_NUMBER;
-        int result = utils::ReadInt(ptrLong);
+        int result = mem::ReadInt(ptrLong);
         return result;
     }
     int getGlowEnable()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_ENABLE;
-        int result = utils::ReadInt(ptrLong);
+        int result = mem::ReadInt(ptrLong);
         return result;
     }
     void setGlowEnable(int glowEnable)
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_ENABLE;
-        utils::WriteInt(ptrLong, glowEnable);
+        mem::WriteInt(ptrLong, glowEnable);
     }
     int getGlowThroughWall()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
-        int result = utils::ReadInt(ptrLong);
+        int result = mem::ReadInt(ptrLong);
         return result;
     }
     void setGlowThroughWall(int glowThroughWall)
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
-        utils::WriteInt(ptrLong, glowThroughWall);
+        mem::WriteInt(ptrLong, glowThroughWall);
+    }
+    float getLastVisibleTime()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::LAST_VISIBLE_TIME;
+        float result = mem::ReadFloat(ptrLong);
+        return result;
+    }
+    bool isVisible()
+    {
+        const float lastVisibleTime = getLastVisibleTime();
+        const bool isVisible = lastVisibleTime > m_lastVisibleTime;
+        m_lastVisibleTime = lastVisibleTime;
+        return isVisible;
     }
     void print()
     {
         std::cout << "Player[" + std::to_string(m_entityListIndex) + "]:\n";
-        std::cout << "\tUnresolvedBasePointer:\t\t\t" + utils::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
-        std::cout << "\tBasePointer:\t\t\t\t" + utils::convertPointerToHexString(getBasePointer()) + "\n";
+        std::cout << "\tUnresolvedBasePointer:\t\t\t" + mem::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
+        std::cout << "\tBasePointer:\t\t\t\t" + mem::convertPointerToHexString(getBasePointer()) + "\n";
         std::cout << "\tIsValid:\t\t\t\t" + std::to_string(isValid()) + "\n";
+        std::cout << "\tInvalidReason:\t\t\t\t" + getInvalidReason() + "\n";
         if (!isValid())
-            std::cout << "\tInvalidReason:\t\t\t\t" + getInvalidReason() + "\n";
-        else
         {
             std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationOriginX()) + "\n";
             std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationOriginY()) + "\n";

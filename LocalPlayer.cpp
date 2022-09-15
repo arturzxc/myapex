@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Utils.cpp"
+#include "Memory.cpp"
 #include "Offsets.cpp"
 
 class LocalPlayer
@@ -13,110 +14,110 @@ public:
     }
     long getBasePointer()
     {
-        long basePointer = utils::ReadLong(getUnresolvedBasePointer());
+        long basePointer = mem::ReadLong(getUnresolvedBasePointer());
         return basePointer;
     }
     float getLocationOriginX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     float getLocationOriginY()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + 4;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     float getLocationOriginZ()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + (4 * 2);
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     int getTeamNumber()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::TEAM_NUMBER;
-        int result = utils::ReadInt(ptrLong);
+        int result = mem::ReadInt(ptrLong);
         return result;
     }
     std::string getName()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::NAME;
-        std::string result = utils::ReadString(ptrLong);
+        std::string result = mem::ReadString(ptrLong);
         return result;
     }
     short getLifeState()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LIFE_STATE;
-        short result = utils::ReadShort(ptrLong);
+        short result = mem::ReadShort(ptrLong);
         return result;
     }
     float getVecPunchWeaponAngleX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     float getVecPunchWeaponAngleY()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE + 4;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     float getViewAngleX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     void setViewAngleX(float angle)
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE;
-        utils::WriteFloat(ptrLong, angle);
+        mem::WriteFloat(ptrLong, angle);
     }
     float getViewAngleY()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE + 4;
-        float result = utils::ReadFloat(ptrLong);
+        float result = mem::ReadFloat(ptrLong);
         return result;
     }
     void setViewAngleY(float angle)
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE + 4;
-        utils::WriteFloat(ptrLong, angle);
+        mem::WriteFloat(ptrLong, angle);
     }
     short getBleedoutState()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::BLEEDOUT_STATE;
-        short result = utils::ReadShort(ptrLong);
+        short result = mem::ReadShort(ptrLong);
         return result;
     }
     short getZooming()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::ZOOMING;
-        short result = utils::ReadShort(ptrLong);
+        short result = mem::ReadShort(ptrLong);
         return result;
     }
     void print()
     {
         std::cout << "LocalPlayer:\n";
-        std::cout << "\tUnresolvedBasePointer:\t\t\t" + utils::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
-        std::cout << "\tBasePointer:\t\t\t\t" + utils::convertPointerToHexString(getBasePointer()) + "\n";
+        std::cout << "\tUnresolvedBasePointer:\t\t\t" + mem::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
+        std::cout << "\tBasePointer:\t\t\t\t" + mem::convertPointerToHexString(getBasePointer()) + "\n";
         std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationOriginX()) + "\n";
         std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationOriginY()) + "\n";
         std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationOriginZ()) + "\n";

@@ -27,11 +27,14 @@ int main()
         players->push_back(new Player(i));
     }
     Sense *sense = new Sense();
-    while (1)
+    while (true)
     {
         try
         {
-            sense->update(localPlayer, players);
+            if (level->isPlayable())
+            {
+                sense->update(localPlayer, players);
+            }
         }
         catch (...)
         {
@@ -40,6 +43,5 @@ int main()
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-
     return 0;
 }
