@@ -13,8 +13,6 @@ namespace mem
         fgets(buf, 512, cmd_pipe);
         pid_t pid = strtoul(buf, NULL, 10);
         pclose(cmd_pipe);
-        if (pid == 0)
-            throw std::invalid_argument("game not found");
         return pid;
     }
     bool Read(long address, void *pBuff, size_t size)

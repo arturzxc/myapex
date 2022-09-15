@@ -16,9 +16,15 @@ int main()
 {
     if (getuid())
     {
-        std::cout << "You.must.be.ROOT!!!" << std ::endl;
+        printf("MUST RUN AS ROOT!\n");
         return -1;
     }
+    if (mem::GetPID() == 0)
+    {
+        printf("GAME NOT FOUND. EXITING!\n");
+        return -1;
+    }
+
     Level *level = new Level();
     LocalPlayer *localPlayer = new LocalPlayer();
     std::vector<Player *> *players = new std::vector<Player *>;
@@ -34,14 +40,17 @@ int main()
             if (level->isPlayable())
             {
                 sense->update(localPlayer, players);
+                printf("SENSE RUNNING\n");
+            }
+            else
+            {
+                printf("SENSE PAUSED\n");
             }
         }
         catch (...)
         {
-            std::cout << "SENSE ERROR" << std::endl;
+            printf("SENSE ERROR\n");
         }
-
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
-    return 0;
 }

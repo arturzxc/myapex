@@ -1,9 +1,7 @@
 #pragma once
 #include <vector>
-#include "Level.cpp"
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
-#include "Math.cpp"
 
 class Sense
 {
