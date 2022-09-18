@@ -8,7 +8,7 @@ class Aimbot
 {
 private:
     int m_smoothing = 1000; // min
-    int m_fovActivation = 600;
+    int m_fovActivationAngle = 600;
 
 public:
     void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
@@ -30,22 +30,21 @@ public:
 
         const float localPlayerViewAngleYaw = localPlayer->getViewAngleYaw();
         const float angleIncrement = calculateAngleDelta(localPlayerViewAngleYaw, desiredViewAngleYaw);
-
-        if (abs(angleIncrement) < m_fovActivation)
+        if (abs(angleIncrement) < m_fovActivationAngle)
         {
-            float newViewAngleYaw = localPlayerViewAngleYaw + (angleIncrement / m_smoothing);
-            flipYawIfNeeded(&newViewAngleYaw);
+            float newViewAngleYaw = flipYawIfNeeded(localPlayerViewAngleYaw + (angleIncrement / m_smoothing));
             localPlayer->setViewAngleY(newViewAngleYaw);
         }
     }
-    void flipYawIfNeeded(float *angle)
+    float flipYawIfNeeded(float angle)
     {
-        if (*angle > 180)
-            *angle = (360 - *angle) * -1;
-        else if (*angle < -180)
-            *angle = (360 + *angle);
+        float myAngle = angle;
+        if (myAngle > 180)
+            myAngle = (360 - myAngle) * -1;
+        else if (myAngle < -180)
+            myAngle = (360 + myAngle);
+        return myAngle;
     }
-
     float calculateAngleDelta(float oldAngle, float newAngle)
     {
         float wayA = newAngle - oldAngle;
@@ -56,12 +55,7 @@ public:
             return wayA;
         return wayB;
     }
-
-    float calculateVieAngleYaw(
-        float localPlayerLocationX,
-        float localPlayerLocationY,
-        float enemyPlayerLocationX,
-        float enemyPlayerLocationY)
+    float calculateVieAngleYaw(float localPlayerLocationX, float localPlayerLocationY, float enemyPlayerLocationX, float enemyPlayerLocationY)
     {
         const float locationDeltaX = enemyPlayerLocationX - localPlayerLocationX;
         const float locationDeltaY = enemyPlayerLocationY - localPlayerLocationY;
