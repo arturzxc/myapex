@@ -6,13 +6,18 @@
 
 namespace mem
 {
+    pid_t m_pid = 0;
+
     pid_t GetPID()
     {
+        if (m_pid > 0)
+            return m_pid;
         char buf[512];
         FILE *cmd_pipe = popen("pidof -s R5Apex.exe", "r");
         fgets(buf, 512, cmd_pipe);
         pid_t pid = strtoul(buf, NULL, 10);
         pclose(cmd_pipe);
+        m_pid = pid;
         return pid;
     }
     bool Read(long address, void *pBuff, size_t size)

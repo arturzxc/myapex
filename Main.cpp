@@ -10,6 +10,10 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Sense.cpp"
+#include "NoRecoil.cpp"
+
+bool IS_SENSE_ON = true;
+bool IS_NO_RECOIL_ON = true;
 
 int main()
 {
@@ -32,24 +36,23 @@ int main()
         players->push_back(new Player(i));
     }
     Sense *sense = new Sense();
+    NoRecoil *noRecoil = new NoRecoil();
     while (true)
     {
         try
         {
             if (level->isPlayable())
             {
-                sense->update(localPlayer, players);
-                printf("SENSE RUNNING\n");
-            }
-            else
-            {
-                printf("SENSE PAUSED\n");
+                if (IS_SENSE_ON)
+                    sense->update(localPlayer, players);
+                if (IS_NO_RECOIL_ON)
+                    noRecoil->update(localPlayer);
             }
         }
         catch (...)
         {
-            printf("SENSE ERROR\n");
+            printf("UPDATE LOOP ERROR, RAND: %d\n", rand());
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        sleep(50 / 1000); // MS
     }
 }

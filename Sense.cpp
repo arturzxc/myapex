@@ -16,8 +16,22 @@ public:
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
-            player->setGlowEnable(7);
-            player->setGlowThroughWall(2);
+            const float distance = math::calculateDistance(localPlayer->getLocationOriginX(),
+                                                           localPlayer->getLocationOriginY(),
+                                                           localPlayer->getLocationOriginZ(),
+                                                           player->getLocationOriginX(),
+                                                           player->getLocationOriginY(),
+                                                           player->getLocationOriginZ());
+            if (localPlayer->getZooming() == 1 && distance > 500)
+            {
+                player->setGlowEnable(5);
+            }
+            else
+            {
+
+                player->setGlowEnable(7);
+                player->setGlowThroughWall(2);
+            }
         }
     }
 };
