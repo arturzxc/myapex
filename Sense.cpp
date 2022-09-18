@@ -2,6 +2,7 @@
 #include <vector>
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
+#include "Math.cpp"
 
 class Sense
 {
@@ -15,16 +16,8 @@ public:
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
-            if (player->isVisible())
-            {
-                player->setGlowEnable(5);
-                player->setGlowThroughWall(2);
-            }
-            else
-            {
-                player->setGlowEnable(7);
-                player->setGlowThroughWall(2);
-            }
+            player->setGlowEnable(7);
+            player->setGlowThroughWall(2);
         }
     }
 };

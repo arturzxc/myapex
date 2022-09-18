@@ -42,7 +42,7 @@ public:
     }
     bool isValid()
     {
-        return getBasePointer() > 0 && getLifeState() == 0 && !getName().empty();
+        return getBasePointer() > 0 && getLifeState() == 0; //&& !getName().empty();
     }
     std::string getInvalidReason()
     {
