@@ -7,8 +7,8 @@
 class Aimbot
 {
 private:
-    int m_smoothing = 500; // min
-    int m_fovActivationAngle = 600;
+    int m_smoothing = 10; // min
+    int m_fovActivationAngle = 2;
 
 public:
     void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
@@ -67,6 +67,9 @@ public:
             if (!player->isValid())
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
+                continue;
+            const bool isVisible = player->isVisible();
+            if (!isVisible)
                 continue;
             float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                             localPlayer->getLocationY(),
