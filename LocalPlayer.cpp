@@ -17,24 +17,24 @@ public:
         long basePointer = mem::ReadLong(getUnresolvedBasePointer());
         return basePointer;
     }
-    float getLocationOriginX()
+    float getLocationX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN;
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getLocationOriginY()
+    float getLocationY()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + 4;
+        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getLocationOriginZ()
+    float getLocationZ()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + (4 * 2);
+        long ptrLong = basePointer + offsets::LOCAL_ORIGIN + (sizeof(float) * 2);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
@@ -59,21 +59,21 @@ public:
         short result = mem::ReadShort(ptrLong);
         return result;
     }
-    float getVecPunchWeaponAngleX()
+    float getPunchAnglePitch()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE;
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getVecPunchWeaponAngleY()
+    float getPunchAngleYaw()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE + 4;
+        long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE + sizeof(float);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getViewAngleX()
+    float getViewAnglePitch()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE;
@@ -82,21 +82,25 @@ public:
     }
     void setViewAngleX(float angle)
     {
+        if (angle > 90 || angle < -90)
+            return;
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE;
         mem::WriteFloat(ptrLong, angle);
     }
-    float getViewAngleY()
+    float getViewAngleYaw()
     {
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::VIEW_ANGLE + 4;
+        long ptrLong = basePointer + offsets::VIEW_ANGLE + sizeof(float);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
     void setViewAngleY(float angle)
     {
+        if (angle > 180 || angle < -180)
+            return;
         long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::VIEW_ANGLE + 4;
+        long ptrLong = basePointer + offsets::VIEW_ANGLE + sizeof(float);
         mem::WriteFloat(ptrLong, angle);
     }
     short getBleedoutState()
@@ -118,16 +122,16 @@ public:
         std::cout << "LocalPlayer:\n";
         std::cout << "\tUnresolvedBasePointer:\t\t\t" + mem::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
         std::cout << "\tBasePointer:\t\t\t\t" + mem::convertPointerToHexString(getBasePointer()) + "\n";
-        std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationOriginX()) + "\n";
-        std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationOriginY()) + "\n";
-        std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationOriginZ()) + "\n";
+        std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationX()) + "\n";
+        std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationY()) + "\n";
+        std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationZ()) + "\n";
         std::cout << "\tTeamNumber:\t\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
         std::cout << "\tName:\t\t\t\t\t" + getName() + "\n";
         std::cout << "\tLifeState:\t\t\t\t" + utils::convertNumberToString(getLifeState()) + "\n";
-        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getVecPunchWeaponAngleX()) + "\n";
-        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getVecPunchWeaponAngleY()) + "\n";
-        std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getViewAngleX()) + "\n";
-        std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getViewAngleY()) + "\n";
+        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getPunchAnglePitch()) + "\n";
+        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getPunchAngleYaw()) + "\n";
+        std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getViewAnglePitch()) + "\n";
+        std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getViewAngleYaw()) + "\n";
         std::cout << "\tBleedoutState:\t\t\t\t" + utils::convertNumberToString(getBleedoutState()) + "\n";
         std::cout << "\tZooming:\t\t\t\t" + utils::convertNumberToString(getZooming()) + "\n";
     }

@@ -15,10 +15,10 @@ private:
 public:
     void update(LocalPlayer *localPlayer)
     {
-        const float viewAnglePitch = localPlayer->getViewAngleX();
-        const float viewAngleYaw = localPlayer->getViewAngleY();
-        const float punchAnglePitch = localPlayer->getVecPunchWeaponAngleX();
-        const float punchAngleYaw = localPlayer->getVecPunchWeaponAngleY();
+        const float viewAnglePitch = localPlayer->getViewAnglePitch();
+        const float viewAngleYaw = localPlayer->getViewAngleYaw();
+        const float punchAnglePitch = localPlayer->getPunchAnglePitch();
+        const float punchAngleYaw = localPlayer->getPunchAngleYaw();
         if (punchAnglePitch == 0 && punchAngleYaw == 0)
             return;
         const float punchAnglePitchDelta = punchAnglePitch - m_previousPunchAnglePitch;

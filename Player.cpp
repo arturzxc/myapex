@@ -55,21 +55,21 @@ public:
         else
             return "Player is valid";
     }
-    float getLocationOriginX()
+    float getLocationX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN;
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getLocationOriginY()
+    float getLocationY()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getLocationOriginZ()
+    float getLocationZ()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float) + sizeof(float);
@@ -132,9 +132,9 @@ public:
         std::cout << "\tInvalidReason:\t\t\t\t" + getInvalidReason() + "\n";
         if (!isValid())
         {
-            std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationOriginX()) + "\n";
-            std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationOriginY()) + "\n";
-            std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationOriginZ()) + "\n";
+            std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationX()) + "\n";
+            std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationY()) + "\n";
+            std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationZ()) + "\n";
             std::cout << "\tTeamNumber:\t\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
             std::cout << "\tGlowEnable:\t\t\t\t" + utils::convertNumberToString(getGlowEnable()) + "\n";
             std::cout << "\tGlowThroughWall:\t\t\t" + utils::convertNumberToString(getGlowThroughWall()) + "\n";
