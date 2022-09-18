@@ -7,7 +7,7 @@
 class Aimbot
 {
 private:
-    int m_smoothing = 1000; // min
+    int m_smoothing = 500; // min
     int m_fovActivationAngle = 600;
 
 public:
@@ -15,24 +15,18 @@ public:
     {
         if (localPlayer->getZooming() != 1)
             return;
-
-        // LPlayerX: 31495.320312 LPlayerY: -6708.900879 LPlayerZ: -29235.982422
-        const float dummLocationX = 31520.320312;
-        const float dummLocationY = -6708.900879;
-        const float dummLocationZ = -29235.982422;
-
-        // printf("LPlayerX: %.6f LPlayerY: %.6f LPlayerZ: %.6f \n", localPlayer->getLocationX(), localPlayer->getLocationY(), localPlayer->getLocationZ());
-
-        float desiredViewAngleYaw = calculateVieAngleYaw(localPlayer->getLocationX(),
-                                                         localPlayer->getLocationY(),
-                                                         dummLocationX,
-                                                         dummLocationY);
-
+        Player *closestEnemy = findClosestEnemy(localPlayer, players);
+        if (closestEnemy == nullptr)
+            return;
+        float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                        localPlayer->getLocationY(),
+                                                        closestEnemy->getLocationX(),
+                                                        closestEnemy->getLocationY());
         const float localPlayerViewAngleYaw = localPlayer->getViewAngleYaw();
-        const float angleIncrement = calculateAngleDelta(localPlayerViewAngleYaw, desiredViewAngleYaw);
-        if (abs(angleIncrement) < m_fovActivationAngle)
+        const float angleDelta = calculateAngleDelta(localPlayerViewAngleYaw, desiredViewAngleYaw);
+        if (abs(angleDelta) < m_fovActivationAngle)
         {
-            float newViewAngleYaw = flipYawIfNeeded(localPlayerViewAngleYaw + (angleIncrement / m_smoothing));
+            float newViewAngleYaw = flipYawIfNeeded(localPlayerViewAngleYaw + (angleDelta / m_smoothing));
             localPlayer->setViewAngleY(newViewAngleYaw);
         }
     }
@@ -55,12 +49,45 @@ public:
             return wayA;
         return wayB;
     }
-    float calculateVieAngleYaw(float localPlayerLocationX, float localPlayerLocationY, float enemyPlayerLocationX, float enemyPlayerLocationY)
+    float calculateDesiredYaw(float localPlayerLocationX, float localPlayerLocationY, float enemyPlayerLocationX, float enemyPlayerLocationY)
     {
         const float locationDeltaX = enemyPlayerLocationX - localPlayerLocationX;
         const float locationDeltaY = enemyPlayerLocationY - localPlayerLocationY;
         const float yawInRadians = atan2(locationDeltaY, locationDeltaX);
         const float yawInDegrees = yawInRadians * (180 / M_PI);
         return yawInDegrees;
+    }
+    Player *findClosestEnemy(LocalPlayer *localPlayer, std::vector<Player *> *players)
+    {
+        Player *closestPlayerSoFar = nullptr;
+        float closestPlayerAngleSoFar;
+        for (int i = 0; i < players->size(); i++)
+        {
+            Player *player = players->at(i);
+            if (!player->isValid())
+                continue;
+            if (player->getTeamNumber() == localPlayer->getTeamNumber())
+                continue;
+            float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                            localPlayer->getLocationY(),
+                                                            player->getLocationX(),
+                                                            player->getLocationY());
+            float angleDelta = calculateAngleDelta(localPlayer->getViewAngleYaw(), desiredViewAngleYaw);
+            if (closestPlayerSoFar == nullptr)
+            {
+                closestPlayerSoFar = player;
+                closestPlayerAngleSoFar = abs(angleDelta);
+            }
+            else
+            {
+
+                if (abs(angleDelta) < closestPlayerAngleSoFar)
+                {
+                    closestPlayerSoFar = player;
+                    closestPlayerAngleSoFar = abs(angleDelta);
+                }
+            }
+        }
+        return closestPlayerSoFar;
     }
 };
