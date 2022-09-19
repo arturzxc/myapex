@@ -45,6 +45,13 @@ public:
         int result = mem::ReadInt(ptrLong);
         return result;
     }
+    int getInAttack()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = offsets::REGION + offsets::IN_ATTACK;
+        int result = mem::ReadInt(ptrLong);
+        return result;
+    }
     std::string getName()
     {
         long basePointer = getBasePointer();

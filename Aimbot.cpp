@@ -7,13 +7,13 @@
 class Aimbot
 {
 private:
-    int m_smoothing = 10; // min
+    int m_smoothing = 5; // min
     int m_fovActivationAngle = 2;
 
 public:
     void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
-        if (localPlayer->getZooming() != 1)
+        if (localPlayer->getInAttack() == 0)
             return;
         Player *closestEnemy = findClosestEnemy(localPlayer, players);
         if (closestEnemy == nullptr)
