@@ -8,7 +8,7 @@ class Aimbot
 {
 private:
     int m_smoothing = 5; // min
-    int m_fovActivationAngle = 2;
+    int m_fovActivationAngle = 5;
 
 public:
     void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
@@ -18,6 +18,10 @@ public:
         Player *closestEnemy = findClosestEnemy(localPlayer, players);
         if (closestEnemy == nullptr)
             return;
+        // float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+        //                                     localPlayer->getLocationY(),
+        //                                     31544.558594,
+        //                                     -6716.772949);
         float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                         localPlayer->getLocationY(),
                                                         closestEnemy->getLocationX(),

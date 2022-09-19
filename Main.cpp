@@ -39,6 +39,7 @@ int main()
     Sense *sense = new Sense();
     NoRecoil *noRecoil = new NoRecoil();
     Aimbot *aimbot = new Aimbot();
+    printf("MYAPEX RUNNING\n");
     while (true)
     {
         try
