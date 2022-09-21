@@ -7,34 +7,28 @@
 class Aimbot
 {
 private:
-    const int m_smoothing = 30;
+    const int m_smoothing = 10;
     const int m_fovActivationAngle = 10;
 
 public:
-    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
+    void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
-        if (!level->isPlayable())
-            return;
         if (!localPlayer->isZooming() && !localPlayer->isInAttack())
             return;
-        double desiredViewAngleYaw;
-        if (level->getName().compare("mp_rr_canyonlands_staging") == 0)
-        {
-            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                      localPlayer->getLocationY(),
-                                                      31518,
-                                                      -6712);
-        }
-        else
-        {
-            Player *closestEnemy = findClosestEnemy(localPlayer, players);
-            if (closestEnemy == nullptr)
-                return;
-            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                      localPlayer->getLocationY(),
-                                                      closestEnemy->getLocationX(),
-                                                      closestEnemy->getLocationY());
-        }
+
+        //      double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+        //                                               localPlayer->getLocationY(),
+        //                                               31518,
+        //                                               -6712);
+
+        Player *closestEnemy = findClosestEnemy(localPlayer, players);
+        if (closestEnemy == nullptr)
+            return;
+        double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                         localPlayer->getLocationY(),
+                                                         closestEnemy->getLocationX(),
+                                                         closestEnemy->getLocationY());
+
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);

@@ -51,7 +51,7 @@ int main()
                 if (IS_NO_RECOIL_ON)
                     noRecoil->update(localPlayer);
                 if (IS_AIMBOT_ON)
-                    aimbot->update(level, localPlayer, players);
+                    aimbot->update(localPlayer, players);
             }
             else
             {
