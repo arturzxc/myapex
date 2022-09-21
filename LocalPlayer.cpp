@@ -45,12 +45,12 @@ public:
         int result = mem::ReadInt(ptrLong);
         return result;
     }
-    int getInAttack()
+    bool isInAttack()
     {
         long basePointer = getBasePointer();
         long ptrLong = offsets::REGION + offsets::IN_ATTACK;
         int result = mem::ReadInt(ptrLong);
-        return result;
+        return result > 0;
     }
     std::string getName()
     {
@@ -66,28 +66,28 @@ public:
         short result = mem::ReadShort(ptrLong);
         return result;
     }
-    float getPunchAnglePitch()
+    float getPunchPitch()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE;
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getPunchAngleYaw()
+    float getPunchYaw()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VEC_PUNCH_WEAPON_ANGLE + sizeof(float);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    float getViewAnglePitch()
+    float getPitch()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE;
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    void setViewAngleX(float angle)
+    void setPitch(float angle)
     {
         if (angle > 90 || angle < -90)
             return;
@@ -95,14 +95,14 @@ public:
         long ptrLong = basePointer + offsets::VIEW_ANGLE;
         mem::WriteFloat(ptrLong, angle);
     }
-    float getViewAngleYaw()
+    float getYaw()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::VIEW_ANGLE + sizeof(float);
         float result = mem::ReadFloat(ptrLong);
         return result;
     }
-    void setViewAngleY(float angle)
+    void setYaw(float angle)
     {
         if (angle > 180 || angle < -180)
             return;
@@ -117,12 +117,12 @@ public:
         short result = mem::ReadShort(ptrLong);
         return result;
     }
-    short getZooming()
+    bool isZooming()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::ZOOMING;
         short result = mem::ReadShort(ptrLong);
-        return result;
+        return result > 0;
     }
     void print()
     {
@@ -135,11 +135,11 @@ public:
         std::cout << "\tTeamNumber:\t\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
         std::cout << "\tName:\t\t\t\t\t" + getName() + "\n";
         std::cout << "\tLifeState:\t\t\t\t" + utils::convertNumberToString(getLifeState()) + "\n";
-        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getPunchAnglePitch()) + "\n";
-        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getPunchAngleYaw()) + "\n";
-        std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getViewAnglePitch()) + "\n";
-        std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getViewAngleYaw()) + "\n";
+        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getPunchPitch()) + "\n";
+        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getPunchYaw()) + "\n";
+        std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getPitch()) + "\n";
+        std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getYaw()) + "\n";
         std::cout << "\tBleedoutState:\t\t\t\t" + utils::convertNumberToString(getBleedoutState()) + "\n";
-        std::cout << "\tZooming:\t\t\t\t" + utils::convertNumberToString(getZooming()) + "\n";
+        std::cout << "\tZooming:\t\t\t\t" + utils::convertNumberToString(isZooming()) + "\n";
     }
 };

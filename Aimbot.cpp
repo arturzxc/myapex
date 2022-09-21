@@ -7,64 +7,75 @@
 class Aimbot
 {
 private:
-    int m_smoothing = 5; // min
-    int m_fovActivationAngle = 5;
+    const int m_smoothing = 30;
+    const int m_fovActivationAngle = 10;
 
 public:
-    void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
+    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
-        if (localPlayer->getInAttack() == 0)
+        if (!level->isPlayable())
             return;
-        Player *closestEnemy = findClosestEnemy(localPlayer, players);
-        if (closestEnemy == nullptr)
+        if (!localPlayer->isZooming() && !localPlayer->isInAttack())
             return;
-        // float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-        //                                     localPlayer->getLocationY(),
-        //                                     31544.558594,
-        //                                     -6716.772949);
-        float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                        localPlayer->getLocationY(),
-                                                        closestEnemy->getLocationX(),
-                                                        closestEnemy->getLocationY());
-        const float localPlayerViewAngleYaw = localPlayer->getViewAngleYaw();
-        const float angleDelta = calculateAngleDelta(localPlayerViewAngleYaw, desiredViewAngleYaw);
-        if (abs(angleDelta) < m_fovActivationAngle)
+        double desiredViewAngleYaw;
+        if (level->getName().compare("mp_rr_canyonlands_staging") == 0)
         {
-            float newViewAngleYaw = flipYawIfNeeded(localPlayerViewAngleYaw + (angleDelta / m_smoothing));
-            localPlayer->setViewAngleY(newViewAngleYaw);
+            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                      localPlayer->getLocationY(),
+                                                      31518,
+                                                      -6712);
+        }
+        else
+        {
+            Player *closestEnemy = findClosestEnemy(localPlayer, players);
+            if (closestEnemy == nullptr)
+                return;
+            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                      localPlayer->getLocationY(),
+                                                      closestEnemy->getLocationX(),
+                                                      closestEnemy->getLocationY());
+        }
+        const double yaw = localPlayer->getYaw();
+        const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
+        const double angleDeltaAbs = abs(angleDelta);
+        if (angleDeltaAbs < m_fovActivationAngle)
+        {
+            const double smoothing = std::fmax(angleDeltaAbs * m_smoothing, 1);
+            double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
+            localPlayer->setYaw(newYaw);
         }
     }
-    float flipYawIfNeeded(float angle)
+    double flipYawIfNeeded(double angle)
     {
-        float myAngle = angle;
+        double myAngle = angle;
         if (myAngle > 180)
             myAngle = (360 - myAngle) * -1;
         else if (myAngle < -180)
             myAngle = (360 + myAngle);
         return myAngle;
     }
-    float calculateAngleDelta(float oldAngle, float newAngle)
+    double calculateAngleDelta(double oldAngle, double newAngle)
     {
-        float wayA = newAngle - oldAngle;
-        float wayB = 360 - abs(wayA);
+        double wayA = newAngle - oldAngle;
+        double wayB = 360 - abs(wayA);
         if (wayA > 0 && wayB > 0)
             wayB *= -1;
         if (abs(wayA) < abs(wayB))
             return wayA;
         return wayB;
     }
-    float calculateDesiredYaw(float localPlayerLocationX, float localPlayerLocationY, float enemyPlayerLocationX, float enemyPlayerLocationY)
+    double calculateDesiredYaw(double localPlayerLocationX, double localPlayerLocationY, double enemyPlayerLocationX, double enemyPlayerLocationY)
     {
-        const float locationDeltaX = enemyPlayerLocationX - localPlayerLocationX;
-        const float locationDeltaY = enemyPlayerLocationY - localPlayerLocationY;
-        const float yawInRadians = atan2(locationDeltaY, locationDeltaX);
-        const float yawInDegrees = yawInRadians * (180 / M_PI);
+        const double locationDeltaX = enemyPlayerLocationX - localPlayerLocationX;
+        const double locationDeltaY = enemyPlayerLocationY - localPlayerLocationY;
+        const double yawInRadians = atan2(locationDeltaY, locationDeltaX);
+        const double yawInDegrees = yawInRadians * (180 / M_PI);
         return yawInDegrees;
     }
     Player *findClosestEnemy(LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
         Player *closestPlayerSoFar = nullptr;
-        float closestPlayerAngleSoFar;
+        double closestPlayerAngleSoFar;
         for (int i = 0; i < players->size(); i++)
         {
             Player *player = players->at(i);
@@ -75,11 +86,11 @@ public:
             const bool isVisible = player->isVisible();
             if (!isVisible)
                 continue;
-            float desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                            localPlayer->getLocationY(),
-                                                            player->getLocationX(),
-                                                            player->getLocationY());
-            float angleDelta = calculateAngleDelta(localPlayer->getViewAngleYaw(), desiredViewAngleYaw);
+            double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                             localPlayer->getLocationY(),
+                                                             player->getLocationX(),
+                                                             player->getLocationY());
+            double angleDelta = calculateAngleDelta(localPlayer->getYaw(), desiredViewAngleYaw);
             if (closestPlayerSoFar == nullptr)
             {
                 closestPlayerSoFar = player;

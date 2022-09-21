@@ -7,27 +7,32 @@
 class NoRecoil
 {
 private:
-    const float m_streangthPitch = 0.9;
-    const float m_streangthYaw = 0.99;
-    float m_previousPunchAnglePitch;
-    float m_previousPunchAngleYaw;
+    const double m_streangthPitch = 0.7;
+    const double m_streangthYaw = 0.99;
+    double m_previousPunchPitch = 0;
+    double m_previousPunchYaw = 0;
 
 public:
     void update(LocalPlayer *localPlayer)
     {
-        const float viewAnglePitch = localPlayer->getViewAnglePitch();
-        const float viewAngleYaw = localPlayer->getViewAngleYaw();
-        const float punchAnglePitch = localPlayer->getPunchAnglePitch();
-        const float punchAngleYaw = localPlayer->getPunchAngleYaw();
-        if (punchAnglePitch == 0 && punchAngleYaw == 0)
-            return;
-        const float punchAnglePitchDelta = punchAnglePitch - m_previousPunchAnglePitch;
-        const float punchAngleYawDelta = punchAngleYaw - m_previousPunchAngleYaw;
-        const float newViewAnglePitch = viewAnglePitch - (punchAnglePitchDelta * m_streangthPitch);
-        const float newViewAngleYaw = viewAngleYaw - (punchAngleYawDelta * m_streangthYaw);
-        localPlayer->setViewAngleX(newViewAnglePitch);
-        localPlayer->setViewAngleY(newViewAngleYaw);
-        m_previousPunchAnglePitch = punchAnglePitch;
-        m_previousPunchAngleYaw = punchAngleYaw;
+        // pitch
+        const double punchPitch = localPlayer->getPunchPitch();
+        if (punchPitch != 0)
+        {
+            const double pitch = localPlayer->getPitch();
+            const double punchPitchDelta = (punchPitch - m_previousPunchPitch) * m_streangthPitch;
+            localPlayer->setPitch(pitch - punchPitchDelta);
+            m_previousPunchPitch = punchPitch;
+        }
+
+        // yaw
+        const double punchYaw = localPlayer->getPunchYaw();
+        if (punchYaw != 0)
+        {
+            const double yaw = localPlayer->getYaw();
+            const double punchYawDelta = (punchYaw - m_previousPunchYaw) * m_streangthYaw;
+            localPlayer->setYaw(yaw - punchYawDelta);
+            m_previousPunchYaw = punchYaw;
+        }
     }
 };

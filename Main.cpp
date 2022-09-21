@@ -51,13 +51,17 @@ int main()
                 if (IS_NO_RECOIL_ON)
                     noRecoil->update(localPlayer);
                 if (IS_AIMBOT_ON)
-                    aimbot->update(localPlayer, players);
+                    aimbot->update(level, localPlayer, players);
+            }
+            else
+            {
+                printf("Level not playable: %s \n", level->getName().c_str());
             }
         }
         catch (...)
         {
             printf("UPDATE LOOP ERROR, RAND: %d\n", rand());
         }
-        sleep(50 / 1000);
+        sleep(10 / 1000);
     }
 }

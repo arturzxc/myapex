@@ -15,15 +15,11 @@ public:
     {
         long basePointer = getBasePointer();
         std::string result = mem::ReadString(basePointer);
-        if (result.empty())
-            result = "LoadingScreen";
         return result;
     }
     bool isPlayable()
     {
         if (getName().empty())
-            return false;
-        if (getName().compare("LoadingScreen") == 0)
             return false;
         if (getName().compare("mp_lobby") == 0)
             return false;

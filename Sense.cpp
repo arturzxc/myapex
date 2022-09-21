@@ -22,7 +22,7 @@ public:
                                                            player->getLocationX(),
                                                            player->getLocationY(),
                                                            player->getLocationZ());
-            if (localPlayer->getZooming() == 1 && distance > 500)
+            if (localPlayer->isZooming() && distance > 500)
             {
                 player->setGlowEnable(5);
             }
