@@ -25,6 +25,12 @@ public:
             return false;
         return true;
     }
+    bool isTrainingArea()
+    {
+        if (getName().compare("mp_rr_canyonlands_staging") == 0)
+            return true;
+        return false;
+    }
     void print()
     {
         std::string str;

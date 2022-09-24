@@ -44,19 +44,10 @@ int main()
     {
         try
         {
-            if (level->isPlayable())
-            {
-                if (IS_SENSE_ON)
-                    sense->update(localPlayer, players);
-                if (IS_NO_RECOIL_ON)
-                    noRecoil->update(localPlayer);
-                if (IS_AIMBOT_ON)
-                    aimbot->update(localPlayer, players);
-            }
-            else
-            {
-                printf("Level not playable: %s \n", level->getName().c_str());
-            }
+            sense->update(level, localPlayer, players);
+            noRecoil->update(level, localPlayer);
+            aimbot->update(level, localPlayer, players);
+            printf("LOOP COMPLETE, RAND: %d\n", rand());
         }
         catch (...)
         {

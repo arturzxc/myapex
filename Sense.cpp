@@ -3,12 +3,15 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Math.cpp"
+#include "Level.cpp"
 
 class Sense
 {
 public:
-    void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
+    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
+        if (!level->isPlayable())
+            return;
         for (int i = 0; i < players->size(); i++)
         {
             Player *player = players->at(i);

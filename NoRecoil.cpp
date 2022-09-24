@@ -13,8 +13,10 @@ private:
     double m_previousPunchYaw = 0;
 
 public:
-    void update(LocalPlayer *localPlayer)
+    void update(Level *level, LocalPlayer *localPlayer)
     {
+        if (!level->isPlayable())
+            return;
         // pitch
         const double punchPitch = localPlayer->getPunchPitch();
         if (punchPitch != 0)
@@ -24,7 +26,6 @@ public:
             localPlayer->setPitch(pitch - punchPitchDelta);
             m_previousPunchPitch = punchPitch;
         }
-
         // yaw
         const double punchYaw = localPlayer->getPunchYaw();
         if (punchYaw != 0)

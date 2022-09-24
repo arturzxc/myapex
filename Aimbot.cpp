@@ -3,38 +3,47 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Math.cpp"
+#include "Level.cpp"
 
 class Aimbot
 {
 private:
-    const int m_smoothing = 10;
-    const int m_fovActivationAngle = 10;
+    const int m_smoothing = 40;
+    const int m_fovActivationAngle = 5;
 
 public:
-    void update(LocalPlayer *localPlayer, std::vector<Player *> *players)
+    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
+        if (!level->isPlayable())
+            return;
         if (!localPlayer->isZooming() && !localPlayer->isInAttack())
             return;
-
-        //      double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-        //                                               localPlayer->getLocationY(),
-        //                                               31518,
-        //                                               -6712);
-
-        Player *closestEnemy = findClosestEnemy(localPlayer, players);
-        if (closestEnemy == nullptr)
-            return;
-        double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                         localPlayer->getLocationY(),
-                                                         closestEnemy->getLocationX(),
-                                                         closestEnemy->getLocationY());
-
+        double desiredViewAngleYaw;
+        if (level->isTrainingArea())
+            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                      localPlayer->getLocationY(),
+                                                      31518,
+                                                      -6712);
+        else
+        {
+            Player *closestEnemy = findClosestEnemy(localPlayer, players);
+            if (closestEnemy == nullptr)
+                return;
+            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
+                                                      localPlayer->getLocationY(),
+                                                      closestEnemy->getLocationX(),
+                                                      closestEnemy->getLocationY());
+        }
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
         if (angleDeltaAbs < m_fovActivationAngle)
         {
-            const double smoothing = std::fmax(angleDeltaAbs * m_smoothing, 1);
+            double smoothing;
+            if (angleDeltaAbs < 1)
+                smoothing = 1;
+            else
+                smoothing = std::fmax(angleDeltaAbs * m_smoothing, 1);
             double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
             localPlayer->setYaw(newYaw);
         }
@@ -74,6 +83,8 @@ public:
         {
             Player *player = players->at(i);
             if (!player->isValid())
+                continue;
+            if (player->getLifeState() > 0)
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
