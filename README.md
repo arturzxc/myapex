@@ -22,7 +22,7 @@ You can hold left shift to temporarily disable.
 
 ### HOW TO SETUP & RUN
 
-1. Download the code using git. Open up terminal and past and run the below commands
+1. Open terminal and run the following to download the cheat source code
 
 ```
 git clone git@github.com:arturzxc/myapex.git
