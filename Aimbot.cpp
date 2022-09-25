@@ -9,13 +9,13 @@
 class Aimbot
 {
 private:
-    const int m_smoothing = 100;
+    const int m_smoothing = 50;
     const int m_fovActivationAngle = 10;
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
-        if (!kr::triggerKeyDown())
+        if (kr::triggerKeyDown())
             return;
         if (!level->isPlayable())
             return;
