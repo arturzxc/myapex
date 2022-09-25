@@ -4,6 +4,7 @@
 #include "Player.cpp"
 #include "Math.cpp"
 #include "KeyReader.cpp"
+#include "Level.cpp"
 
 class NoRecoil
 {
@@ -16,7 +17,7 @@ private:
 public:
     void update(Level *level, LocalPlayer *localPlayer)
     {
-        if (kr::leftShiftKeyDown())
+        if (!kr::triggerKeyDown())
             return;
         if (!level->isPlayable())
             return;

@@ -15,7 +15,7 @@ private:
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
-        if (kr::leftShiftKeyDown())
+        if (!kr::triggerKeyDown())
             return;
         if (!level->isPlayable())
             return;
