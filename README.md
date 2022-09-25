@@ -22,7 +22,7 @@ You can hold left shift to temporarily disable.
 
 ### HOW TO SETUP & RUN
 
-1. Download the code using git
+1. Download the code using git. Open up terminal and past and run the below commands
 
 ```
 git clone git@github.com:arturzxc/myapex.git
@@ -48,6 +48,7 @@ g++ Main.cpp -lX11
 sudo ./a.out
 ```
 
+You should now see a lot of lines being printer saying something akin to "LOOP OK...." which means the cheat is running fine.
 
 
 
