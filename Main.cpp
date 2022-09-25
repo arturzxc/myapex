@@ -12,10 +12,6 @@
 #include "NoRecoil.cpp"
 #include "Aimbot.cpp"
 
-bool IS_SENSE_ON = true;
-bool IS_NO_RECOIL_ON = true;
-bool IS_AIMBOT_ON = true;
-
 int main()
 {
     if (getuid())
