@@ -24,8 +24,9 @@ cd myapex
 
 3. Compile the code 
 
+```
 g++ Main.cpp -lX11
-
+```
 
 4. Start the game
 
