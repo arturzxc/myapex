@@ -48,7 +48,7 @@ g++ Main.cpp -lX11
 sudo ./a.out
 ```
 
-You should now see a lot of lines being printer saying something akin to "LOOP OK...." which means the cheat is running fine.
+You should now see a lot of lines being printed saying "LOOP OK...." which means the cheat is running fine. Enjoy.
 
 
 
