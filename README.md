@@ -42,7 +42,7 @@ g++ Main.cpp -lX11
 
 4. Go to your Steam and run Apex Legends
 
-5. Run the cheat
+5. Run the cheat (requires sudo access for read & write memory)
 
 ```
 sudo ./a.out
