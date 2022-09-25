@@ -40,7 +40,7 @@ cd myapex
 g++ Main.cpp -lX11
 ```
 
-4. Start the Apex Legends
+4. Go to your Steam and run Apex Legends
 
 5. Run the cheat
 
