@@ -3,6 +3,7 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Math.cpp"
+#include "KeyReader.cpp"
 
 class NoRecoil
 {
@@ -15,6 +16,8 @@ private:
 public:
     void update(Level *level, LocalPlayer *localPlayer)
     {
+        if (kr::leftShiftKeyDown())
+            return;
         if (!level->isPlayable())
             return;
         // pitch

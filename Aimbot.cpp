@@ -4,6 +4,7 @@
 #include "Player.cpp"
 #include "Math.cpp"
 #include "Level.cpp"
+#include "KeyReader.cpp"
 
 class Aimbot
 {
@@ -14,6 +15,8 @@ private:
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
+        if (kr::leftShiftKeyDown())
+            return;
         if (!level->isPlayable())
             return;
         if (!localPlayer->isZooming() && !localPlayer->isInAttack())

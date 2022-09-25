@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <chrono>
 #include <thread>
 #include <unistd.h>
 #include <vector>
@@ -29,6 +28,7 @@ int main()
         printf("GAME NOT FOUND. EXITING!\n");
         return -1;
     }
+    printf("MYAPEX RUNNING\n");
     Level *level = new Level();
     LocalPlayer *localPlayer = new LocalPlayer();
     std::vector<Player *> *players = new std::vector<Player *>;
@@ -39,19 +39,18 @@ int main()
     Sense *sense = new Sense();
     NoRecoil *noRecoil = new NoRecoil();
     Aimbot *aimbot = new Aimbot();
-    printf("MYAPEX RUNNING\n");
-    while (true)
+    while (1)
     {
         try
         {
             sense->update(level, localPlayer, players);
             noRecoil->update(level, localPlayer);
             aimbot->update(level, localPlayer, players);
-            printf("LOOP COMPLETE, RAND: %d\n", rand());
+            printf("LOOP OK: %d\n", rand());
         }
         catch (...)
         {
-            printf("UPDATE LOOP ERROR, RAND: %d\n", rand());
+            printf("LOOP ERROR, RAND: %d\n", rand());
         }
         sleep(10 / 1000);
     }
