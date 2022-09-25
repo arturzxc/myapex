@@ -3,15 +3,17 @@ Simple C++ cheats for Apex Legends (Linux Steam version).
 
 ### Sense 
 All enemies will be highlighted with Bloodhound Scan.
-If aiming down sights and the enemy is further than 50 meters then they will be highlighted using the Caustic Vision and not visible through walls in order to prevent shooting at walls at greater distances where it is hard to say whether they are behind a wall or sticking out.
+If aiming down sights and the enemy is further than 50 meters then they will be highlighted using the Caustic Vision and not visible through walls in order to prevent shooting at walls.
 
 ### NoRecoil
 Adjustable reduction in vertical and horizontal weapon recoil.
+You can hold left shift to temporarily disable.
 
 ### Aimbot
 An adjustable aimbot intended for CQC combat. 
 Works of enemy posistion rather than bones. 
 Only works horizontally.
+You can hold left shift to temporarily disable.
 
 ## Requirements
 1. Linux OS with X11
