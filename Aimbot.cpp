@@ -9,8 +9,8 @@
 class Aimbot
 {
 private:
-    const int m_smoothing = 40;
-    const int m_fovActivationAngle = 5;
+    const int m_smoothing = 100;
+    const int m_fovActivationAngle = 10;
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
