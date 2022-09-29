@@ -1,15 +1,17 @@
 #pragma once
 namespace offsets
 {
+    // @source: https://pastebin.com/raw/y3XP9i2m
+    // @url:    https://www.unknowncheats.me/forum/3537956-post10768.html
     // buttons
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const long IN_ATTACK = 0x075c6260; // [Buttons] -> in_attack
+    const long IN_ATTACK = 0x075c62e0;   // [Buttons] -> in_attack
     // core
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long REGION = 0x140000000;     // [Mine]          -> Region
     const long LEVEL = 0x13c3e38;        // [Miscellaneous] -> LevelName
-    const long LOCAL_PLAYER = 0x1e49288; // [Miscellaneous] -> LocalPlayer
-    const long ENTITY_LIST = 0x1a98778;  // [Miscellaneous] -> cl_entitylist
+    const long LOCAL_PLAYER = 0x1e49268; // [Miscellaneous] -> LocalPlayer
+    const long ENTITY_LIST = 0x1a98758;  // [Miscellaneous] -> cl_entitylist
     // entity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long LOCAL_ORIGIN = 0x0158; // [DataMap.CBaseViewModel]    -> m_localOrigin
