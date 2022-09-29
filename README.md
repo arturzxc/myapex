@@ -42,7 +42,11 @@ g++ Main.cpp -lX11
 
 4. Go to your Steam and run Apex Legends
 
-5. Run the cheat (requires sudo access for read & write memory)
+5. **[IMPORTANT] ** Update system settings, be sure to have in (append or replace the right lines).
+    1. `/etc/fstab`                     ->      `proc  /proc  proc    defaults,nosuid,nodev,noexec,relatime,hidepid=2 0 0`
+    2. `/etc/sysctl.d/10-ptrace.conf`   ->      `kernel.yama.ptrace_scope = 2`
+
+6. Run the cheat (requires sudo access for read & write memory)
 
 ```
 sudo ./a.out
