@@ -26,5 +26,5 @@ namespace offsets
     const long VIEW_ANGLE = (0x253c - 0x14);        // [DataMap.C_Player]               -> m_ammoPoolCapacity - 0x14
     const long BLEEDOUT_STATE = 0x26d0;             // [RecvTable.DT_Player]            -> m_bleedoutState
     const long ZOOMING = 0x1c01;                    // [RecvTable.DT_Player]            -> m_bZooming
-    const long LAST_VISIBLE_TIME = 0x1a48;          // [Miscellaneous]                  -> CPlayer!lastVisibleTime
+    const long LAST_VISIBLE_TIME = 0x1670;          // [Miscellaneous]                  -> CPlayer!lastVisibleTime
 }
