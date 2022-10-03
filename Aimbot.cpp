@@ -5,6 +5,7 @@
 #include "Math.cpp"
 #include "Level.cpp"
 #include "KeyReader.cpp"
+#include "math.h"
 
 class Aimbot
 {
@@ -15,18 +16,27 @@ private:
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
-        if (kr::triggerKeyDown())
-            return;
+        // if (kr::triggerKeyDown())
+        //     return;
         if (!level->isPlayable())
             return;
         if (!localPlayer->isZooming() && !localPlayer->isInAttack())
             return;
         double desiredViewAngleYaw;
+        double distanceToTarget;
         if (level->isTrainingArea())
+        {
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       31518,
                                                       -6712);
+            distanceToTarget = math::calculateDistance(localPlayer->getLocationX(),
+                                                       localPlayer->getLocationY(),
+                                                       localPlayer->getLocationZ(),
+                                                       31518,
+                                                       -6712,
+                                                       localPlayer->getLocationZ());
+        }
         else
         {
             Player *closestEnemy = findClosestEnemy(localPlayer, players);
@@ -36,7 +46,16 @@ public:
                                                       localPlayer->getLocationY(),
                                                       closestEnemy->getLocationX(),
                                                       closestEnemy->getLocationY());
+
+            distanceToTarget = math::calculateDistance(localPlayer->getLocationX(),
+                                                       localPlayer->getLocationY(),
+                                                       localPlayer->getLocationZ(),
+                                                       closestEnemy->getLocationX(),
+                                                       closestEnemy->getLocationY(),
+                                                       closestEnemy->getLocationZ());
         }
+        if (distanceToTarget > 500)
+            return;
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);

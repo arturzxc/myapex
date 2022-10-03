@@ -8,8 +8,8 @@ namespace offsets
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long REGION = 0x140000000;     // [Mine]          -> Region
     const long LEVEL = 0x13c3e38;        // [Miscellaneous] -> LevelName
-    const long LOCAL_PLAYER = 0x1e49288; // [Miscellaneous] -> LocalPlayer
-    const long ENTITY_LIST = 0x1a98778;  // [Miscellaneous] -> cl_entitylist
+    const long LOCAL_PLAYER = 0x1e49268; // [Miscellaneous] -> LocalPlayer
+    const long ENTITY_LIST = 0x1a98758;  // [Miscellaneous] -> cl_entitylist
     // entity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long LOCAL_ORIGIN = 0x0158; // [DataMap.CBaseViewModel]    -> m_localOrigin

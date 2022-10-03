@@ -17,8 +17,8 @@ private:
 public:
     void update(Level *level, LocalPlayer *localPlayer)
     {
-        if (kr::triggerKeyDown())
-            return;
+        // if (kr::triggerKeyDown())
+        //     return;
         if (!level->isPlayable())
             return;
         // pitch

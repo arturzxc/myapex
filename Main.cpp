@@ -9,8 +9,8 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Sense.cpp"
-#include "NoRecoil.cpp"
-#include "Aimbot.cpp"
+// #include "NoRecoil.cpp"
+// #include "Aimbot.cpp"
 
 int main()
 {
@@ -33,15 +33,15 @@ int main()
         players->push_back(new Player(i));
     }
     Sense *sense = new Sense();
-    NoRecoil *noRecoil = new NoRecoil();
-    Aimbot *aimbot = new Aimbot();
+    // NoRecoil *noRecoil = new NoRecoil();
+    // Aimbot *aimbot = new Aimbot();
     while (1)
     {
         try
         {
             sense->update(level, localPlayer, players);
-            noRecoil->update(level, localPlayer);
-            aimbot->update(level, localPlayer, players);
+            // noRecoil->update(level, localPlayer);
+            // aimbot->update(level, localPlayer, players);
             printf("LOOP OK: %d\n", rand());
         }
         catch (...)
