@@ -7,11 +7,10 @@
 #include "math.h"
 #include "X11Utils.cpp"
 
-class Aimbot
+class Triggerbot
 {
 private:
-    const int m_smoothingWhileNotOnTarget = 36; // If you cross-hairs are not on target then this smoothness will be used.
-    const int m_smoothingWhileOnTarget = 18;    // If you cross-hairs are on target then this smoothness will be used.
+    const float m_triggerAngle = 0.5f;
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
@@ -21,12 +20,13 @@ public:
         if (!level->isPlayable())
             return;
         double desiredViewAngleYaw;
-        double distanceToTargetInMeters;
         if (level->isTrainingArea())
+        {
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       31518,
                                                       -6712);
+        }
         else
         {
             Player *closestEnemy = findClosestEnemy(localPlayer, players);
@@ -40,13 +40,8 @@ public:
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
-        double smoothing;
-        if (angleDeltaAbs < 1)
-            smoothing = m_smoothingWhileOnTarget;
-        else
-            smoothing = std::fmax(angleDeltaAbs * m_smoothingWhileNotOnTarget, 1);
-        double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
-        localPlayer->setYaw(newYaw);
+        if (angleDeltaAbs < m_triggerAngle)
+            x11Utils->mouseClick(1);
     }
     double flipYawIfNeeded(double angle)
     {
