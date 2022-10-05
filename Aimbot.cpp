@@ -10,27 +10,44 @@
 class Aimbot
 {
 private:
-    const int m_smoothingWhileNotOnTarget = 36; // If you cross-hairs are not on target then this smoothness will be used.
-    const int m_smoothingWhileOnTarget = 18;    // If you cross-hairs are on target then this smoothness will be used.
+    const int m_smoothingWhileNotOnTarget = 30;                   // If you cross-hairs are not on target then this smoothness will be used.
+    const int m_smoothingWhileOnTarget = 15;                      // If you cross-hairs are on target then this smoothness will be used.
+    const float m_closeDistanceAtWhichWeIgnoreTriggerButton = 20; // if the enemy is super close then we engage aimbot regardless of trigger key
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
-        if (!x11Utils->triggerKeyDown())
-            return;
         if (!level->isPlayable())
             return;
         double desiredViewAngleYaw;
-        double distanceToTargetInMeters;
         if (level->isTrainingArea())
+        {
+            double distanceToTargetInMeters = math::calculateDistanceInMeters(localPlayer->getLocationX(),
+                                                                              localPlayer->getLocationY(),
+                                                                              localPlayer->getLocationZ(),
+                                                                              31518,
+                                                                              -6712,
+                                                                              localPlayer->getLocationZ());
+            if (!x11Utils->triggerKeyDown() && distanceToTargetInMeters > m_closeDistanceAtWhichWeIgnoreTriggerButton)
+                return;
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       31518,
                                                       -6712);
+        }
         else
         {
             Player *closestEnemy = findClosestEnemy(localPlayer, players);
             if (closestEnemy == nullptr)
+                return;
+
+            double distanceToTargetInMeters = math::calculateDistanceInMeters(localPlayer->getLocationX(),
+                                                                              localPlayer->getLocationY(),
+                                                                              localPlayer->getLocationZ(),
+                                                                              closestEnemy->getLocationX(),
+                                                                              closestEnemy->getLocationY(),
+                                                                              closestEnemy->getLocationZ());
+            if (!x11Utils->triggerKeyDown() && distanceToTargetInMeters > m_closeDistanceAtWhichWeIgnoreTriggerButton)
                 return;
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),

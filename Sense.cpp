@@ -19,13 +19,13 @@ public:
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
-            const float distance = math::calculateDistance(localPlayer->getLocationX(),
-                                                           localPlayer->getLocationY(),
-                                                           localPlayer->getLocationZ(),
-                                                           player->getLocationX(),
-                                                           player->getLocationY(),
-                                                           player->getLocationZ());
-            if (localPlayer->isZooming() && distance > 500)
+            const float distance = math::calculateDistanceInMeters(localPlayer->getLocationX(),
+                                                                   localPlayer->getLocationY(),
+                                                                   localPlayer->getLocationZ(),
+                                                                   player->getLocationX(),
+                                                                   player->getLocationY(),
+                                                                   player->getLocationZ());
+            if (localPlayer->isZooming() && distance > 20)
             {
                 player->setGlowEnable(5);
             }
