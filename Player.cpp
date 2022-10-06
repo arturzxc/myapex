@@ -26,12 +26,19 @@ public:
         long basePointer = mem::ReadLong(getUnresolvedBasePointer());
         return basePointer;
     }
-    short getLifeState()
+    bool isDead()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LIFE_STATE;
         short result = mem::ReadShort(ptrLong);
-        return result;
+        return result > 0;
+    }
+    bool isKnocked()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::BLEEDOUT_STATE;
+        short result = mem::ReadShort(ptrLong);
+        return result > 0;
     }
     std::string getName()
     {
@@ -42,14 +49,14 @@ public:
     }
     bool isValid()
     {
-        return getBasePointer() > 0 && getLifeState() == 0; //&& !getName().empty();
+        return getBasePointer() > 0 && !isDead();
     }
     std::string getInvalidReason()
     {
         if (getBasePointer() == 0)
             return "Unresolved base pointer";
-        else if (getLifeState() != 0)
-            return "LifeState is not zero";
+        else if (isDead())
+            return "Player is dead";
         else if (getName().empty())
             return "Name is empty";
         else

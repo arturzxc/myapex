@@ -9,16 +9,14 @@
 class NoRecoil
 {
 private:
-    const double m_streangthPitch = 0.5;
-    const double m_streangthYaw = 0.8;
+    const double m_streangthPitch = 0.3;
+    const double m_streangthYaw = 0.4;
     double m_previousPunchPitch = 0;
     double m_previousPunchYaw = 0;
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, X11Utils *x11Utils)
     {
-        if (!x11Utils->triggerKeyDown())
-            return;
         if (!level->isPlayable())
             return;
         // pitch

@@ -1,5 +1,9 @@
 #pragma once
 #include <vector>
+#include <chrono>
+#include <iostream>
+#include <sys/time.h>
+#include <ctime>
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Math.cpp"
@@ -10,11 +14,16 @@
 class Triggerbot
 {
 private:
-    const float m_triggerAngle = 0.5f;
+    const float m_triggerAngle = 1.0f;
+    const int m_minGapBetrweenShotsInMS = 50;
+    int m_lastTimeShot = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
+        int currentTimeInMS = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        if ((currentTimeInMS - m_lastTimeShot) < m_minGapBetrweenShotsInMS)
+            return;
         if (!x11Utils->triggerKeyDown())
             return;
         if (!level->isPlayable())
@@ -41,7 +50,10 @@ public:
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
         if (angleDeltaAbs < m_triggerAngle)
+        {
             x11Utils->mouseClick(1);
+            m_lastTimeShot = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        }
     }
     double flipYawIfNeeded(double angle)
     {
@@ -79,7 +91,7 @@ public:
             Player *player = players->at(i);
             if (!player->isValid())
                 continue;
-            if (player->getLifeState() > 0)
+            if (player->isKnocked())
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;

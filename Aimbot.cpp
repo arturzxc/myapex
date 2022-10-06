@@ -10,26 +10,25 @@
 class Aimbot
 {
 private:
-    const int m_smoothingWhileNotOnTarget = 30;                   // If you cross-hairs are not on target then this smoothness will be used.
-    const int m_smoothingWhileOnTarget = 15;                      // If you cross-hairs are on target then this smoothness will be used.
-    const float m_closeDistanceAtWhichWeIgnoreTriggerButton = 20; // if the enemy is super close then we engage aimbot regardless of trigger key
+    const int m_smoothingWhileNotOnTarget = 30; // If you cross-hairs are not on target then this smoothness will be used.
+    const int m_smoothingWhileOnTarget = 15;    // If you cross-hairs are on target then this smoothness will be used.
+    const int m_activationFOV = 2;              // FOV for activation
+    const bool m_ignoreTriggerButton = true;    // enable if you want the aimbot to work all the time
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
+        if (!m_ignoreTriggerButton && !x11Utils->triggerKeyDown())
+            return;
         if (!level->isPlayable())
+            return;
+        if (localPlayer->isKnocked())
+            return;
+        if (localPlayer->isDead())
             return;
         double desiredViewAngleYaw;
         if (level->isTrainingArea())
         {
-            double distanceToTargetInMeters = math::calculateDistanceInMeters(localPlayer->getLocationX(),
-                                                                              localPlayer->getLocationY(),
-                                                                              localPlayer->getLocationZ(),
-                                                                              31518,
-                                                                              -6712,
-                                                                              localPlayer->getLocationZ());
-            if (!x11Utils->triggerKeyDown() && distanceToTargetInMeters > m_closeDistanceAtWhichWeIgnoreTriggerButton)
-                return;
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       31518,
@@ -40,15 +39,6 @@ public:
             Player *closestEnemy = findClosestEnemy(localPlayer, players);
             if (closestEnemy == nullptr)
                 return;
-
-            double distanceToTargetInMeters = math::calculateDistanceInMeters(localPlayer->getLocationX(),
-                                                                              localPlayer->getLocationY(),
-                                                                              localPlayer->getLocationZ(),
-                                                                              closestEnemy->getLocationX(),
-                                                                              closestEnemy->getLocationY(),
-                                                                              closestEnemy->getLocationZ());
-            if (!x11Utils->triggerKeyDown() && distanceToTargetInMeters > m_closeDistanceAtWhichWeIgnoreTriggerButton)
-                return;
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       closestEnemy->getLocationX(),
@@ -57,12 +47,15 @@ public:
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
-        double smoothing;
-        if (angleDeltaAbs < 1)
-            smoothing = m_smoothingWhileOnTarget;
-        else
-            smoothing = std::fmax(angleDeltaAbs * m_smoothingWhileNotOnTarget, 1);
-        double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
+        if (angleDeltaAbs > m_activationFOV)
+            return;
+        // double smoothing;
+        // if (angleDeltaAbs < 1)
+        //     smoothing = m_smoothingWhileOnTarget;
+        // else
+        //     smoothing = std::fmax(angleDeltaAbs * m_smoothingWhileNotOnTarget, 1);
+        // double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
+        double newYaw = flipYawIfNeeded(yaw + (angleDelta / m_smoothingWhileNotOnTarget));
         localPlayer->setYaw(newYaw);
     }
     double flipYawIfNeeded(double angle)
@@ -101,7 +94,9 @@ public:
             Player *player = players->at(i);
             if (!player->isValid())
                 continue;
-            if (player->getLifeState() > 0)
+            if (player->isKnocked())
+                continue;
+            if (player->isDead())
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;

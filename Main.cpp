@@ -17,9 +17,9 @@
 #include "X11Utils.cpp"
 
 bool senseOn = true;
-bool norecoilOn = false;
+bool norecoilOn = true;
 bool aimbotOn = true;
-bool triggerbotOn = false; //Not ready yet.
+bool triggerbotOn = true;
 
 int main(int argc, char *argv[])
 {
@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
         {
             if (senseOn)
             {
-                sense->update(level, localPlayer, players);
+                sense->update(level, localPlayer, players, x11Utils);
             }
             if (norecoilOn)
             {

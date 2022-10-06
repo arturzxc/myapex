@@ -59,12 +59,19 @@ public:
         std::string result = mem::ReadString(ptrLong);
         return result;
     }
-    short getLifeState()
+    bool isKnocked()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::BLEEDOUT_STATE;
+        short result = mem::ReadShort(ptrLong);
+        return result > 0;
+    }
+    bool isDead()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LIFE_STATE;
         short result = mem::ReadShort(ptrLong);
-        return result;
+        return result > 0;
     }
     float getPunchPitch()
     {
@@ -110,36 +117,11 @@ public:
         long ptrLong = basePointer + offsets::VIEW_ANGLE + sizeof(float);
         mem::WriteFloat(ptrLong, angle);
     }
-    short getBleedoutState()
-    {
-        long basePointer = getBasePointer();
-        long ptrLong = basePointer + offsets::BLEEDOUT_STATE;
-        short result = mem::ReadShort(ptrLong);
-        return result;
-    }
     bool isZooming()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::ZOOMING;
         short result = mem::ReadShort(ptrLong);
         return result > 0;
-    }
-    void print()
-    {
-        std::cout << "LocalPlayer:\n";
-        std::cout << "\tUnresolvedBasePointer:\t\t\t" + mem::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
-        std::cout << "\tBasePointer:\t\t\t\t" + mem::convertPointerToHexString(getBasePointer()) + "\n";
-        std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationX()) + "\n";
-        std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationY()) + "\n";
-        std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationZ()) + "\n";
-        std::cout << "\tTeamNumber:\t\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
-        std::cout << "\tName:\t\t\t\t\t" + getName() + "\n";
-        std::cout << "\tLifeState:\t\t\t\t" + utils::convertNumberToString(getLifeState()) + "\n";
-        std::cout << "\tPunchWeaponAngleX:\t\t\t" + utils::convertNumberToString(getPunchPitch()) + "\n";
-        std::cout << "\tPunchWeaponAngleY:\t\t\t" + utils::convertNumberToString(getPunchYaw()) + "\n";
-        std::cout << "\tViewAngleX:\t\t\t\t" + utils::convertNumberToString(getPitch()) + "\n";
-        std::cout << "\tViewAngleY:\t\t\t\t" + utils::convertNumberToString(getYaw()) + "\n";
-        std::cout << "\tBleedoutState:\t\t\t\t" + utils::convertNumberToString(getBleedoutState()) + "\n";
-        std::cout << "\tZooming:\t\t\t\t" + utils::convertNumberToString(isZooming()) + "\n";
     }
 };
