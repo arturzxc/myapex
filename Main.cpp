@@ -17,8 +17,8 @@
 #include "X11Utils.cpp"
 
 bool senseOn = true;
-bool norecoilOn = true;
-bool aimbotOn = true;
+bool norecoilOn = false;
+bool aimbotOn = false;
 bool triggerbotOn = true;
 
 int main(int argc, char *argv[])
