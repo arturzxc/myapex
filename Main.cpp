@@ -12,14 +12,12 @@
 #include "Sense.cpp"
 #include "NoRecoil.cpp"
 #include "Aimbot.cpp"
-#include "Triggerbot.cpp"
 #include "Weapon.cpp"
 #include "X11Utils.cpp"
 
 bool senseOn = true;
-bool norecoilOn = false;
-bool aimbotOn = false;
-bool triggerbotOn = true;
+bool norecoilOn = true;
+bool aimbotOn = true;
 
 int main(int argc, char *argv[])
 {
@@ -46,16 +44,11 @@ int main(int argc, char *argv[])
     Sense *sense = new Sense();
     NoRecoil *noRecoil = new NoRecoil();
     Aimbot *aimbot = new Aimbot();
-    Triggerbot *triggerbot = new Triggerbot();
     int counter = 0;
     while (1)
     {
         try
         {
-            if (senseOn)
-            {
-                sense->update(level, localPlayer, players, x11Utils);
-            }
             if (norecoilOn)
             {
                 noRecoil->update(level, localPlayer, x11Utils);
@@ -64,18 +57,16 @@ int main(int argc, char *argv[])
             {
                 aimbot->update(level, localPlayer, players, x11Utils);
             }
-            if (triggerbotOn)
+            if (senseOn)
             {
-                triggerbot->update(level, localPlayer, players, x11Utils);
+                sense->update(level, localPlayer, players, x11Utils);
             }
-
-            if (counter % 100 == 0)
-                printf("UPDATE %d OK \n", counter);
-            std::this_thread::sleep_for(std::chrono::milliseconds(6)); // 144HZ screen does 6.94ms updates
+            printf("UPDATE %d OK \n", counter);
+            std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
         catch (...)
         {
-            printf("LOOP ERROR. SLEEPING FOR 10 SECONDS, RAND: %d\n", counter); // this happens on loading screen
+            printf("LOOP ERROR (LOADING SCREEN?). SLEEPING FOR 10 SECONDS, RAND: %d\n", counter); // this happens on loading screen
             std::this_thread::sleep_for(std::chrono::seconds(10));
         }
         counter++;

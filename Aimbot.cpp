@@ -10,23 +10,17 @@
 class Aimbot
 {
 private:
-    const int m_smoothingWhileNotOnTarget = 30; // If you cross-hairs are not on target then this smoothness will be used.
-    const int m_smoothingWhileOnTarget = 15;    // If you cross-hairs are on target then this smoothness will be used.
-    const int m_activationFOV = 2;              // FOV for activation
-    const bool m_ignoreTriggerButton = true;    // enable if you want the aimbot to work all the time
+    const int m_smoothing = 10;    // If you cross-hairs are not on target then this smoothness will be used.
+    const int m_activationFOV = 10; // FOV for activation
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
-        if (!m_ignoreTriggerButton && !x11Utils->triggerKeyDown())
+        if (!x11Utils->triggerKeyDown())
             return;
         if (!level->isPlayable())
             return;
-        if (localPlayer->isKnocked())
-            return;
-        if (localPlayer->isDead())
-            return;
-        double desiredViewAngleYaw;
+        double desiredViewAngleYaw = 0;
         if (level->isTrainingArea())
         {
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
@@ -49,13 +43,7 @@ public:
         const double angleDeltaAbs = abs(angleDelta);
         if (angleDeltaAbs > m_activationFOV)
             return;
-        // double smoothing;
-        // if (angleDeltaAbs < 1)
-        //     smoothing = m_smoothingWhileOnTarget;
-        // else
-        //     smoothing = std::fmax(angleDeltaAbs * m_smoothingWhileNotOnTarget, 1);
-        // double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
-        double newYaw = flipYawIfNeeded(yaw + (angleDelta / m_smoothingWhileNotOnTarget));
+        double newYaw = flipYawIfNeeded(yaw + (angleDelta / m_smoothing));
         localPlayer->setYaw(newYaw);
     }
     double flipYawIfNeeded(double angle)
@@ -96,12 +84,9 @@ public:
                 continue;
             if (player->isKnocked())
                 continue;
-            if (player->isDead())
-                continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
-            const bool isVisible = player->isVisible();
-            if (!isVisible)
+            if (!player->isVisible())
                 continue;
             double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                              localPlayer->getLocationY(),
