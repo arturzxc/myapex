@@ -12,7 +12,6 @@
 #include "Sense.cpp"
 #include "NoRecoil.cpp"
 #include "Aimbot.cpp"
-#include "Weapon.cpp"
 #include "X11Utils.cpp"
 
 bool senseOn = true;
@@ -34,7 +33,6 @@ int main(int argc, char *argv[])
     printf("MYAPEX RUNNING\n");
     Level *level = new Level();
     LocalPlayer *localPlayer = new LocalPlayer();
-    Weapon *weapon = new Weapon();
     X11Utils *x11Utils = new X11Utils();
     std::vector<Player *> *players = new std::vector<Player *>;
     for (int i = 0; i < 60; i++)
