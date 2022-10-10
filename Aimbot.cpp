@@ -4,29 +4,30 @@
 #include "Player.cpp"
 #include "Math.cpp"
 #include "Level.cpp"
-#include "KeyReader.cpp"
+#include "math.h"
+#include "X11Utils.cpp"
 
 class Aimbot
 {
 private:
-    const int m_smoothing = 100;
-    const int m_fovActivationAngle = 10;
+    const int m_smoothing = 10;    // If you cross-hairs are not on target then this smoothness will be used.
+    const int m_activationFOV = 10; // FOV for activation
 
 public:
-    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
+    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
-        if (kr::leftShiftKeyDown())
+        if (!x11Utils->triggerKeyDown())
             return;
         if (!level->isPlayable())
             return;
-        if (!localPlayer->isZooming() && !localPlayer->isInAttack())
-            return;
-        double desiredViewAngleYaw;
+        double desiredViewAngleYaw = 0;
         if (level->isTrainingArea())
+        {
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       31518,
                                                       -6712);
+        }
         else
         {
             Player *closestEnemy = findClosestEnemy(localPlayer, players);
@@ -40,16 +41,10 @@ public:
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
-        if (angleDeltaAbs < m_fovActivationAngle)
-        {
-            double smoothing;
-            if (angleDeltaAbs < 1)
-                smoothing = 1;
-            else
-                smoothing = std::fmax(angleDeltaAbs * m_smoothing, 1);
-            double newYaw = flipYawIfNeeded(yaw + (angleDelta / smoothing));
-            localPlayer->setYaw(newYaw);
-        }
+        if (angleDeltaAbs > m_activationFOV)
+            return;
+        double newYaw = flipYawIfNeeded(yaw + (angleDelta / m_smoothing));
+        localPlayer->setYaw(newYaw);
     }
     double flipYawIfNeeded(double angle)
     {
@@ -87,12 +82,11 @@ public:
             Player *player = players->at(i);
             if (!player->isValid())
                 continue;
-            if (player->getLifeState() > 0)
+            if (player->isKnocked())
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
-            const bool isVisible = player->isVisible();
-            if (!isVisible)
+            if (!player->isVisible())
                 continue;
             double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                              localPlayer->getLocationY(),

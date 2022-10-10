@@ -4,11 +4,12 @@
 #include "Player.cpp"
 #include "Math.cpp"
 #include "Level.cpp"
+#include "X11Utils.cpp"
 
 class Sense
 {
 public:
-    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players)
+    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
         if (!level->isPlayable())
             return;
@@ -19,15 +20,10 @@ public:
                 continue;
             if (player->getTeamNumber() == localPlayer->getTeamNumber())
                 continue;
-            const float distance = math::calculateDistance(localPlayer->getLocationX(),
-                                                           localPlayer->getLocationY(),
-                                                           localPlayer->getLocationZ(),
-                                                           player->getLocationX(),
-                                                           player->getLocationY(),
-                                                           player->getLocationZ());
-            if (localPlayer->isZooming() && distance > 500)
+            if (player->isVisible())
             {
                 player->setGlowEnable(5);
+                player->setGlowThroughWall(1);
             }
             else
             {

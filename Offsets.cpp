@@ -25,4 +25,11 @@ namespace offsets
     const long BLEEDOUT_STATE = 0x26d0;             // [RecvTable.DT_Player]            -> m_bleedoutState
     const long ZOOMING = 0x1c01;                    // [RecvTable.DT_Player]            -> m_bZooming
     const long LAST_VISIBLE_TIME = 0x1a48;          // [Miscellaneous]                  -> CPlayer!lastVisibleTime
+    // weapon
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    const long WEAPON = 0x012ef098;          // [ClientClasses] -> CWeaponX //BASEANIMATING FOR NOWWW
+    const long WEAPON_AMMO_IN_CLIP = 0x1624; // [DataMap.CWeaponX] -> m_ammoInClip
+    const long WEAPON_IS_SEMI_AUTO = 0x1b92; // [Miscellaneous] ->CWeaponX!m_isSemiAuto
+
+    const long m_latestPrimaryWeapons = 0x19ec; //weapon of local player?
 }

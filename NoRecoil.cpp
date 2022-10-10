@@ -3,21 +3,20 @@
 #include "LocalPlayer.cpp"
 #include "Player.cpp"
 #include "Math.cpp"
-#include "KeyReader.cpp"
+#include "Level.cpp"
+#include "X11Utils.cpp"
 
 class NoRecoil
 {
 private:
-    const double m_streangthPitch = 0.7;
-    const double m_streangthYaw = 0.99;
+    const double m_streangthPitch = 1;
+    const double m_streangthYaw = 1;
     double m_previousPunchPitch = 0;
     double m_previousPunchYaw = 0;
 
 public:
-    void update(Level *level, LocalPlayer *localPlayer)
+    void update(Level *level, LocalPlayer *localPlayer, X11Utils *x11Utils)
     {
-        if (kr::leftShiftKeyDown())
-            return;
         if (!level->isPlayable())
             return;
         // pitch
