@@ -9,8 +9,8 @@
 class NoRecoil
 {
 private:
-    const double m_streangthPitch = 1;
-    const double m_streangthYaw = 1;
+    const double m_streangthPitch = 0.8;
+    const double m_streangthYaw = 0.9;
     double m_previousPunchPitch = 0;
     double m_previousPunchYaw = 0;
 
@@ -18,6 +18,12 @@ public:
     void update(Level *level, LocalPlayer *localPlayer, X11Utils *x11Utils)
     {
         if (!level->isPlayable())
+            return;
+        if (localPlayer->isDead())
+            return;
+        if (localPlayer->isKnocked())
+            return;
+        if (!localPlayer->isInAttack())
             return;
         // pitch
         const double punchPitch = localPlayer->getPunchPitch();

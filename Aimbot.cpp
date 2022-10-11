@@ -10,7 +10,7 @@
 class Aimbot
 {
 private:
-    const int m_smoothing = 10;    // If you cross-hairs are not on target then this smoothness will be used.
+    const int m_smoothing = 10;     // If you cross-hairs are not on target then this smoothness will be used.
     const int m_activationFOV = 10; // FOV for activation
 
 public:
@@ -19,6 +19,12 @@ public:
         if (!x11Utils->triggerKeyDown())
             return;
         if (!level->isPlayable())
+            return;
+        if (localPlayer->isDead())
+            return;
+        if (localPlayer->isKnocked())
+            return;
+        if (!localPlayer->isInAttack())
             return;
         double desiredViewAngleYaw = 0;
         if (level->isTrainingArea())

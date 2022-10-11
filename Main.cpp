@@ -62,6 +62,11 @@ int main(int argc, char *argv[])
             printf("UPDATE %d OK \n", counter);
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
+        catch (std::exception &e)
+        {
+            std::cerr << "SEG FAULT. SLEEPING FOR 10 SECONDS: " << e.what() << std::endl;
+            std::this_thread::sleep_for(std::chrono::seconds(10));
+        }
         catch (...)
         {
             printf("LOOP ERROR (LOADING SCREEN?). SLEEPING FOR 10 SECONDS, RAND: %d\n", counter); // this happens on loading screen
