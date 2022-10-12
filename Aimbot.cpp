@@ -24,8 +24,6 @@ public:
             return;
         if (localPlayer->isKnocked())
             return;
-        if (!localPlayer->isInAttack())
-            return;
         double desiredViewAngleYaw = 0;
         if (level->isTrainingArea())
         {
