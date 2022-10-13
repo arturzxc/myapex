@@ -59,13 +59,8 @@ int main(int argc, char *argv[])
             {
                 sense->update(level, localPlayer, players, x11Utils);
             }
-            printf("UPDATE %d OK \n", counter);
+            printf("UPDATE %d OK. \n", counter);
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
-        }
-        catch (std::exception &e)
-        {
-            std::cerr << "SEG FAULT. SLEEPING FOR 10 SECONDS: " << e.what() << std::endl;
-            std::this_thread::sleep_for(std::chrono::seconds(10));
         }
         catch (...)
         {

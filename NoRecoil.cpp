@@ -23,9 +23,6 @@ public:
             return;
         if (localPlayer->isKnocked())
             return;
-        if (!localPlayer->isInAttack())
-            return;
-        // pitch
         const double punchPitch = localPlayer->getPunchPitch();
         if (punchPitch != 0)
         {
@@ -34,7 +31,6 @@ public:
             localPlayer->setPitch(pitch - punchPitchDelta);
             m_previousPunchPitch = punchPitch;
         }
-        // yaw
         const double punchYaw = localPlayer->getPunchYaw();
         if (punchYaw != 0)
         {
