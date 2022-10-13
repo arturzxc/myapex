@@ -15,8 +15,8 @@
 #include "X11Utils.cpp"
 
 bool senseOn = true;
-bool norecoilOn = true;
-bool aimbotOn = true;
+bool norecoilOn = false;
+bool aimbotOn = false;
 
 int main(int argc, char *argv[])
 {
@@ -69,6 +69,14 @@ int main(int argc, char *argv[])
         }
         counter++;
         if (counter > 1000)
+        {
             counter = 0;
+            localPlayer->markForPointerResolution();
+            for (int i = 0; i < players->size(); i++)
+            {
+                Player *player = players->at(i);
+                player->markForPointerResolution();
+            }
+        }
     }
 }

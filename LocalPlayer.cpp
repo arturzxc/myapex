@@ -6,7 +6,8 @@
 
 class LocalPlayer
 {
-public:
+private:
+    long m_basePointer = 0;
     long getUnresolvedBasePointer()
     {
         long unresolvedBasePointer = offsets::REGION + offsets::LOCAL_PLAYER;
@@ -14,8 +15,15 @@ public:
     }
     long getBasePointer()
     {
-        long basePointer = mem::ReadLong(getUnresolvedBasePointer());
-        return basePointer;
+        if (m_basePointer == 0)
+            m_basePointer = mem::ReadLong(getUnresolvedBasePointer());
+        return m_basePointer;
+    }
+
+public:
+    void markForPointerResolution()
+    {
+        m_basePointer = 0;
     }
     float getLocationX()
     {
