@@ -9,8 +9,8 @@
 class NoRecoil
 {
 private:
-    const double m_streangthPitch = 1;
-    const double m_streangthYaw = 1;
+    const double m_streangthPitch = 0.99;
+    const double m_streangthYaw = 0.99;
     double m_previousPunchPitch = 0;
     double m_previousPunchYaw = 0;
 
