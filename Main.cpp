@@ -15,7 +15,7 @@
 #include "X11Utils.cpp"
 
 bool senseOn = true;
-bool norecoilOn = true;
+bool norecoilOn = false;
 bool aimbotOn = true;
 
 int main(int argc, char *argv[])
@@ -59,7 +59,7 @@ int main(int argc, char *argv[])
             {
                 sense->update(level, localPlayer, players, x11Utils);
             }
-            printf("UPDATE %d OK. \n", counter);
+            // printf("UPDATE %d OK. \n", counter);
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
         catch (...)

@@ -10,27 +10,36 @@
 class Aimbot
 {
 private:
-    const int m_smoothing = 10;     // If you cross-hairs are not on target then this smoothness will be used.
-    const int m_activationFOV = 10; // FOV for activation
+    const int m_smoothing = 10;
+    const int m_activationFOV = 7;
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
-        if (!x11Utils->triggerKeyDown())
-            return;
+        // if (!x11Utils->triggerKeyDown())
+        //     return;
         if (!level->isPlayable())
             return;
         if (localPlayer->isDead())
             return;
         if (localPlayer->isKnocked())
             return;
+        if (!localPlayer->isInAttack())
+            return;
         double desiredViewAngleYaw = 0;
+        double desiredViewAnglePitch = 0;
         if (level->isTrainingArea())
         {
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
                                                       31518,
                                                       -6712);
+            desiredViewAnglePitch = calculateDesiredPitch(localPlayer->getLocationX(),
+                                                          localPlayer->getLocationY(),
+                                                          localPlayer->getLocationZ(),
+                                                          31518,
+                                                          -6712,
+                                                          -29235);
         }
         else
         {
@@ -41,7 +50,22 @@ public:
                                                       localPlayer->getLocationY(),
                                                       closestEnemy->getLocationX(),
                                                       closestEnemy->getLocationY());
+            desiredViewAnglePitch = calculateDesiredPitch(localPlayer->getLocationX(),
+                                                          localPlayer->getLocationY(),
+                                                          localPlayer->getLocationZ(),
+                                                          closestEnemy->getLocationX(),
+                                                          closestEnemy->getLocationY(),
+                                                          closestEnemy->getLocationZ());
         }
+
+        // Setup Pitch
+        const double pitch = localPlayer->getPitch();
+        const double pitchAngleDelta = calculatePitchAngleDelta(pitch, desiredViewAnglePitch);
+        const double pitchAngleDeltaAbs = abs(pitchAngleDelta);
+        if (pitchAngleDeltaAbs > m_activationFOV / 2)
+            return;
+
+        // Setup Yaw
         const double yaw = localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
@@ -59,6 +83,11 @@ public:
             myAngle = (360 + myAngle);
         return myAngle;
     }
+    double calculatePitchAngleDelta(double oldAngle, double newAngle)
+    {
+        double wayA = newAngle - oldAngle;
+        return wayA;
+    }
     double calculateAngleDelta(double oldAngle, double newAngle)
     {
         double wayA = newAngle - oldAngle;
@@ -69,13 +98,31 @@ public:
             return wayA;
         return wayB;
     }
-    double calculateDesiredYaw(double localPlayerLocationX, double localPlayerLocationY, double enemyPlayerLocationX, double enemyPlayerLocationY)
+    double calculateDesiredYaw(
+        double localPlayerLocationX,
+        double localPlayerLocationY,
+        double enemyPlayerLocationX,
+        double enemyPlayerLocationY)
     {
         const double locationDeltaX = enemyPlayerLocationX - localPlayerLocationX;
         const double locationDeltaY = enemyPlayerLocationY - localPlayerLocationY;
         const double yawInRadians = atan2(locationDeltaY, locationDeltaX);
         const double yawInDegrees = yawInRadians * (180 / M_PI);
         return yawInDegrees;
+    }
+    double calculateDesiredPitch(
+        double localPlayerLocationX,
+        double localPlayerLocationY,
+        double localPlayerLocationZ,
+        double enemyPlayerLocationX,
+        double enemyPlayerLocationY,
+        double enemyPlayerLocationZ)
+    {
+        const double locationDeltaZ = enemyPlayerLocationZ - localPlayerLocationZ;
+        const double distanceBetweenPlayers = math::calculateDistance2D(enemyPlayerLocationX, enemyPlayerLocationY, localPlayerLocationX, localPlayerLocationY);
+        const double pitchInRadians = atan2(-locationDeltaZ, distanceBetweenPlayers);
+        const double pitchInDegrees = pitchInRadians * (180 / M_PI);
+        return pitchInDegrees;
     }
     Player *findClosestEnemy(LocalPlayer *localPlayer, std::vector<Player *> *players)
     {
