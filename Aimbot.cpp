@@ -12,20 +12,36 @@ class Aimbot
 private:
     const int m_smoothing = 10;
     const int m_activationFOV = 7;
+    Player *m_lockedOnPlayer = nullptr;
 
 public:
     void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
     {
         // if (!x11Utils->triggerKeyDown())
+        // {
+        //     m_lockedOnPlayer = nullptr;
         //     return;
+        // }
         if (!level->isPlayable())
+        {
+            m_lockedOnPlayer = nullptr;
             return;
+        }
         if (localPlayer->isDead())
+        {
+            m_lockedOnPlayer = nullptr;
             return;
+        }
         if (localPlayer->isKnocked())
+        {
+            m_lockedOnPlayer = nullptr;
             return;
+        }
         if (!localPlayer->isInAttack())
+        {
+            m_lockedOnPlayer = nullptr;
             return;
+        }
         double desiredViewAngleYaw = 0;
         double desiredViewAnglePitch = 0;
         if (level->isTrainingArea())
@@ -43,19 +59,20 @@ public:
         }
         else
         {
-            Player *closestEnemy = findClosestEnemy(localPlayer, players);
-            if (closestEnemy == nullptr)
+            if (m_lockedOnPlayer == nullptr)
+                m_lockedOnPlayer = findClosestEnemy(localPlayer, players);
+            if (m_lockedOnPlayer == nullptr)
                 return;
             desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
                                                       localPlayer->getLocationY(),
-                                                      closestEnemy->getLocationX(),
-                                                      closestEnemy->getLocationY());
+                                                      m_lockedOnPlayer->getLocationX(),
+                                                      m_lockedOnPlayer->getLocationY());
             desiredViewAnglePitch = calculateDesiredPitch(localPlayer->getLocationX(),
                                                           localPlayer->getLocationY(),
                                                           localPlayer->getLocationZ(),
-                                                          closestEnemy->getLocationX(),
-                                                          closestEnemy->getLocationY(),
-                                                          closestEnemy->getLocationZ());
+                                                          m_lockedOnPlayer->getLocationX(),
+                                                          m_lockedOnPlayer->getLocationY(),
+                                                          m_lockedOnPlayer->getLocationZ());
         }
 
         // Setup Pitch
