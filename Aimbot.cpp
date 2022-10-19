@@ -10,49 +10,69 @@
 class Aimbot
 {
 private:
-    const int m_smoothing = 10;
-    const int m_activationFOV = 7;
+    ConfigLoader *m_configLoader;
+    Level *m_level;
+    LocalPlayer *m_localPlayer;
+    std::vector<Player *> *m_players;
+    X11Utils *m_x11Utils;
+
     Player *m_lockedOnPlayer = nullptr;
 
 public:
-    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
+    Aimbot(ConfigLoader *configLoader,
+           Level *level,
+           LocalPlayer *localPlayer,
+           std::vector<Player *> *players,
+           X11Utils *x11Utils)
     {
-        // if (!x11Utils->triggerKeyDown())
-        // {
-        //     m_lockedOnPlayer = nullptr;
-        //     return;
-        // }
-        if (!level->isPlayable())
+        m_configLoader = configLoader;
+        m_level = level;
+        m_localPlayer = localPlayer;
+        m_players = players;
+        m_x11Utils = x11Utils;
+    }
+    void update()
+    {
+        if (m_configLoader->getAimbotTrigger() != 0x0000){ // our trigger is a button            
+            if (!m_x11Utils->keyDown(m_configLoader->getAimbotTrigger()))
+            {
+                m_lockedOnPlayer = nullptr;
+                return;
+            }
+        }
+        if (!m_level->isPlayable())
         {
             m_lockedOnPlayer = nullptr;
             return;
         }
-        if (localPlayer->isDead())
+        if (m_localPlayer->isDead())
         {
             m_lockedOnPlayer = nullptr;
             return;
         }
-        if (localPlayer->isKnocked())
+        if (m_localPlayer->isKnocked())
         {
             m_lockedOnPlayer = nullptr;
             return;
         }
-        if (!localPlayer->isInAttack())
-        {
-            m_lockedOnPlayer = nullptr;
-            return;
-        }
+        if (m_configLoader->getAimbotTrigger() == 0x0000) // our trigger is localplayer attacking
+            if (!m_localPlayer->isInAttack())
+            {
+                m_lockedOnPlayer = nullptr;
+                return;
+            }
+
         double desiredViewAngleYaw = 0;
         double desiredViewAnglePitch = 0;
-        if (level->isTrainingArea())
+        if (m_level->isTrainingArea())
         {
-            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                      localPlayer->getLocationY(),
+            desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(),
+                                                      m_localPlayer->getLocationY(),
                                                       31518,
                                                       -6712);
-            desiredViewAnglePitch = calculateDesiredPitch(localPlayer->getLocationX(),
-                                                          localPlayer->getLocationY(),
-                                                          localPlayer->getLocationZ(),
+            desiredViewAnglePitch = calculateDesiredPitch(m_localPlayer->getLocationX(),
+                                                          m_localPlayer->getLocationY(),
+                                                          m_localPlayer->getLocationZ(),
                                                           31518,
                                                           -6712,
                                                           -29235);
@@ -60,36 +80,36 @@ public:
         else
         {
             if (m_lockedOnPlayer == nullptr)
-                m_lockedOnPlayer = findClosestEnemy(localPlayer, players);
+                m_lockedOnPlayer = findClosestEnemy();
             if (m_lockedOnPlayer == nullptr)
                 return;
-            desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                      localPlayer->getLocationY(),
+            desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(),
+                                                      m_localPlayer->getLocationY(),
                                                       m_lockedOnPlayer->getLocationX(),
                                                       m_lockedOnPlayer->getLocationY());
-            desiredViewAnglePitch = calculateDesiredPitch(localPlayer->getLocationX(),
-                                                          localPlayer->getLocationY(),
-                                                          localPlayer->getLocationZ(),
+            desiredViewAnglePitch = calculateDesiredPitch(m_localPlayer->getLocationX(),
+                                                          m_localPlayer->getLocationY(),
+                                                          m_localPlayer->getLocationZ(),
                                                           m_lockedOnPlayer->getLocationX(),
                                                           m_lockedOnPlayer->getLocationY(),
                                                           m_lockedOnPlayer->getLocationZ());
         }
 
         // Setup Pitch
-        const double pitch = localPlayer->getPitch();
+        const double pitch = m_localPlayer->getPitch();
         const double pitchAngleDelta = calculatePitchAngleDelta(pitch, desiredViewAnglePitch);
         const double pitchAngleDeltaAbs = abs(pitchAngleDelta);
-        if (pitchAngleDeltaAbs > m_activationFOV / 2)
+        if (pitchAngleDeltaAbs > m_configLoader->getAimbotActivationFOV() / 2)
             return;
 
         // Setup Yaw
-        const double yaw = localPlayer->getYaw();
+        const double yaw = m_localPlayer->getYaw();
         const double angleDelta = calculateAngleDelta(yaw, desiredViewAngleYaw);
         const double angleDeltaAbs = abs(angleDelta);
-        if (angleDeltaAbs > m_activationFOV)
+        if (angleDeltaAbs > m_configLoader->getAimbotActivationFOV())
             return;
-        double newYaw = flipYawIfNeeded(yaw + (angleDelta / m_smoothing));
-        localPlayer->setYaw(newYaw);
+        double newYaw = flipYawIfNeeded(yaw + (angleDelta / m_configLoader->getAimbotSmoothing()));
+        m_localPlayer->setYaw(newYaw);
     }
     double flipYawIfNeeded(double angle)
     {
@@ -141,26 +161,26 @@ public:
         const double pitchInDegrees = pitchInRadians * (180 / M_PI);
         return pitchInDegrees;
     }
-    Player *findClosestEnemy(LocalPlayer *localPlayer, std::vector<Player *> *players)
+    Player *findClosestEnemy()
     {
         Player *closestPlayerSoFar = nullptr;
         double closestPlayerAngleSoFar;
-        for (int i = 0; i < players->size(); i++)
+        for (int i = 0; i < m_players->size(); i++)
         {
-            Player *player = players->at(i);
+            Player *player = m_players->at(i);
             if (!player->isValid())
                 continue;
             if (player->isKnocked())
                 continue;
-            if (player->getTeamNumber() == localPlayer->getTeamNumber())
+            if (player->getTeamNumber() == m_localPlayer->getTeamNumber())
                 continue;
             if (!player->isVisible())
                 continue;
-            double desiredViewAngleYaw = calculateDesiredYaw(localPlayer->getLocationX(),
-                                                             localPlayer->getLocationY(),
+            double desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(),
+                                                             m_localPlayer->getLocationY(),
                                                              player->getLocationX(),
                                                              player->getLocationY());
-            double angleDelta = calculateAngleDelta(localPlayer->getYaw(), desiredViewAngleYaw);
+            double angleDelta = calculateAngleDelta(m_localPlayer->getYaw(), desiredViewAngleYaw);
             if (closestPlayerSoFar == nullptr)
             {
                 closestPlayerSoFar = player;

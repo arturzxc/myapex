@@ -5,20 +5,40 @@
 #include "Math.cpp"
 #include "Level.cpp"
 #include "X11Utils.cpp"
+#include "ConfigLoader.cpp"
 
 class Sense
 {
+private:
+    ConfigLoader *m_configLoader;
+    Level *m_level;
+    LocalPlayer *m_localPlayer;
+    std::vector<Player *> *m_players;
+    X11Utils *m_x11Utils;
+
 public:
-    void update(Level *level, LocalPlayer *localPlayer, std::vector<Player *> *players, X11Utils *x11Utils)
+    Sense(ConfigLoader *configLoader,
+          Level *level,
+          LocalPlayer *localPlayer,
+          std::vector<Player *> *players,
+          X11Utils *x11Utils)
     {
-        if (!level->isPlayable())
+        m_configLoader = configLoader;
+        m_level = level;
+        m_localPlayer = localPlayer;
+        m_players = players;
+        m_x11Utils = x11Utils;
+    }
+    void update()
+    {
+        if (!m_level->isPlayable())
             return;
-        for (int i = 0; i < players->size(); i++)
+        for (int i = 0; i < m_players->size(); i++)
         {
-            Player *player = players->at(i);
+            Player *player = m_players->at(i);
             if (!player->isValid())
                 continue;
-            if (player->getTeamNumber() == localPlayer->getTeamNumber())
+            if (player->getTeamNumber() == m_localPlayer->getTeamNumber())
                 continue;
             if (player->isVisible())
             {

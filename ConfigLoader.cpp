@@ -20,11 +20,11 @@ private:
     // aimbot
     int m_aimbotSmoothing = 999999;
     int m_aimbotActivationFOV = 0;
-    std::string m_aimbotTrigger = "IN_ATTACK";
+    int m_aimbotTrigger = 0x0000;
 
     // norecoil
-    double m_strengthPitch = 0;
-    double m_strengthYaw = 0;
+    double m_norecoilPitchStrength = 0;
+    double m_norecoilYawStrength = 0;
 
     void loadFileIntoVector()
     {
@@ -66,12 +66,12 @@ private:
             m_featureNoRecoilOn = (lineKey.compare("FEATURE_NORECOIL_ON") != 0) ? m_featureNoRecoilOn : utils::toBool(lineValue);
             m_featureSenseOn = (lineKey.compare("FEATURE_SENSE_ON") != 0) ? m_featureSenseOn : utils::toBool(lineValue);
             // aimbot
-            m_aimbotTrigger = (lineKey.compare("AIMBOT_TRIGGER") != 0) ? m_aimbotTrigger : lineValue;
+            m_aimbotTrigger = (lineKey.compare("AIMBOT_TRIGGER") != 0) ? m_aimbotTrigger : stoi(lineValue, 0, 16);
             m_aimbotSmoothing = (lineKey.compare("AIMBOT_SMOOTHING") != 0) ? m_aimbotSmoothing : stoi(lineValue);
             m_aimbotActivationFOV = (lineKey.compare("AIMBOT_ACTIVATION_FOV") != 0) ? m_aimbotActivationFOV : stoi(lineValue);
             // norecoil
-            m_strengthPitch = (lineKey.compare("NORECOIL_PITCH_STRENGTH") != 0) ? m_strengthPitch : stod(lineValue);
-            m_strengthYaw = (lineKey.compare("NORECOIL_YAW_STRENGTH") != 0) ? m_strengthYaw : stod(lineValue);
+            m_norecoilPitchStrength = (lineKey.compare("NORECOIL_PITCH_STRENGTH") != 0) ? m_norecoilPitchStrength : stod(lineValue);
+            m_norecoilYawStrength = (lineKey.compare("NORECOIL_YAW_STRENGTH") != 0) ? m_norecoilYawStrength : stod(lineValue);
         }
     }
 
@@ -83,12 +83,12 @@ private:
         printf("FEATURE_NORECOIL_ON \t\t%s\n", m_featureNoRecoilOn ? "true" : "false");
         printf("FEATURE_SENSE_ON \t\t%s\n", m_featureSenseOn ? "true" : "false");
 
-        printf("AIMBOT_TRIGGER \t\t\t%s\n", m_aimbotTrigger.c_str());
+        printf("AIMBOT_TRIGGER \t\t\t%d\n", m_aimbotTrigger);
         printf("AIMBOT_SMOOTHING \t\t%d\n", m_aimbotSmoothing);
         printf("AIMBOT_ACTIVATION_FOV \t\t%d\n", m_aimbotActivationFOV);
 
-        printf("NORECOIL_PITCH_STRENGTH \t%.6f\n", m_strengthPitch);
-        printf("NORECOIL_YAW_STRENGTH \t\t%.6f\n", m_strengthYaw);
+        printf("NORECOIL_PITCH_STRENGTH \t%.6f\n", m_norecoilPitchStrength);
+        printf("NORECOIL_YAW_STRENGTH \t\t%.6f\n", m_norecoilYawStrength);
     }
 
 public:
@@ -99,6 +99,7 @@ public:
         print();
     }
 
+    // features
     bool isAimbotOn()
     {
         return m_featureAimbotOn;
@@ -110,5 +111,29 @@ public:
     bool isSenseOn()
     {
         return m_featureSenseOn;
+    }
+
+    // aimbot
+    int getAimbotTrigger()
+    {
+        return m_aimbotTrigger;
+    }
+    int getAimbotSmoothing()
+    {
+        return m_aimbotSmoothing;
+    }
+    int getAimbotActivationFOV()
+    {
+        return m_aimbotActivationFOV;
+    }
+
+    // norecoil
+    double getNorecoilPitchStrength()
+    {
+        return m_norecoilPitchStrength;
+    }
+    double getNorecoilYawStrength()
+    {
+        return m_norecoilYawStrength;
     }
 };

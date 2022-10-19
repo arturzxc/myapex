@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
     {
         players->push_back(new Player(i));
     }
-    Sense *sense = new Sense();
-    NoRecoil *noRecoil = new NoRecoil();
-    Aimbot *aimbot = new Aimbot();
+    Sense *sense = new Sense(configLoader, level, localPlayer, players, x11Utils);
+    NoRecoil *noRecoil = new NoRecoil(configLoader, level, localPlayer, players, x11Utils);
+    Aimbot *aimbot = new Aimbot(configLoader, level, localPlayer, players, x11Utils);
 
     // Main loop
     printf("MYAPEX STARTING MAIN LOOP\n");
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     {
         try
         {
-            // resolve pointers only once per loop for all players
+            // resolve pointers
             localPlayer->markForPointerResolution();
             for (int i = 0; i < players->size(); i++)
             {
@@ -57,17 +57,20 @@ int main(int argc, char *argv[])
 
             // run features
             if (configLoader->isNorecoilOn())
-                noRecoil->update(level, localPlayer, x11Utils);
+                noRecoil->update();
             if (configLoader->isAimbotOn())
-                aimbot->update(level, localPlayer, players, x11Utils);
+                aimbot->update();
             if (configLoader->isSenseOn())
-                sense->update(level, localPlayer, players, x11Utils);
-            printf("UPDATE[%d]\tOK. \n", counter);
+                sense->update();
+
+            // all ran fine
+            if (counter % 250 == 0)
+                printf("UPDATE[%d] OK. \n", counter);
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }
         catch (...)
         {
-            printf("UPDATE[%d] ERROR (LOADING SCREEN?). SLEEPING FOR 10 SECONDS\n", counter); // this happens on loading screen
+            printf("UPDATE[%d] ERROR (LOADING SCREEN?). SLEEPING FOR 10 SECONDS\n", counter);
             std::this_thread::sleep_for(std::chrono::seconds(10));
         }
         counter++;
