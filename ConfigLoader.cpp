@@ -8,7 +8,7 @@
 class ConfigLoader
 {
 private:
-    const std::string m_fileName = "settings.ini";
+    const std::string m_fileName = "myapex.ini";
     std::vector<std::string> *lines = new std::vector<std::string>;
     long m_lastTimeFileEdited = 0;
 
