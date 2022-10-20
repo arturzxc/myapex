@@ -47,6 +47,9 @@ int main(int argc, char *argv[])
     {
         try
         {
+            if (counter % 200 == 0)
+                configLoader->reloadFile(); // will attempt to reload config if ther have been any updates to it
+
             // resolve pointers
             localPlayer->markForPointerResolution();
             for (int i = 0; i < players->size(); i++)
@@ -56,15 +59,17 @@ int main(int argc, char *argv[])
             }
 
             // run features
-            if (configLoader->isNorecoilOn())
-                noRecoil->update();
             if (configLoader->isAimbotOn())
                 aimbot->update();
+
+            if (configLoader->isNorecoilOn())
+                noRecoil->update();
+
             if (configLoader->isSenseOn())
                 sense->update();
 
             // all ran fine
-            if (counter % 250 == 0)
+            if (counter % 1000 == 0)
                 printf("UPDATE[%d] OK. \n", counter);
             std::this_thread::sleep_for(std::chrono::milliseconds(5));
         }

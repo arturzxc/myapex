@@ -33,7 +33,9 @@ public:
     }
     void update()
     {
-        if (m_configLoader->getAimbotTrigger() != 0x0000){ // our trigger is a button            
+        // validations
+        if (m_configLoader->getAimbotTrigger() != 0x0000)
+        { // our trigger is a button
             if (!m_x11Utils->keyDown(m_configLoader->getAimbotTrigger()))
             {
                 m_lockedOnPlayer = nullptr;
@@ -62,10 +64,19 @@ public:
                 return;
             }
 
+        // get desired angle to an enemy
         double desiredViewAngleYaw = 0;
         double desiredViewAnglePitch = 0;
         if (m_level->isTrainingArea())
         {
+            double distanceToTarget = math::calculateDistanceInMeters(m_localPlayer->getLocationX(),
+                                                                      m_localPlayer->getLocationY(),
+                                                                      m_localPlayer->getLocationZ(),
+                                                                      31518,
+                                                                      -6712,
+                                                                      -29235);
+            if (distanceToTarget > m_configLoader->getAimbotMaxRange())
+                return;
             desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(),
                                                       m_localPlayer->getLocationY(),
                                                       31518,
@@ -82,6 +93,14 @@ public:
             if (m_lockedOnPlayer == nullptr)
                 m_lockedOnPlayer = findClosestEnemy();
             if (m_lockedOnPlayer == nullptr)
+                return;
+            double distanceToTarget = math::calculateDistanceInMeters(m_localPlayer->getLocationX(),
+                                                                      m_localPlayer->getLocationY(),
+                                                                      m_localPlayer->getLocationZ(),
+                                                                      m_lockedOnPlayer->getLocationX(),
+                                                                      m_lockedOnPlayer->getLocationY(),
+                                                                      m_lockedOnPlayer->getLocationZ());
+            if (distanceToTarget > m_configLoader->getAimbotMaxRange())
                 return;
             desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(),
                                                       m_localPlayer->getLocationY(),

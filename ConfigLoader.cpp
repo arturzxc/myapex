@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <sys/stat.h>
 #include "Utils.cpp"
 
 class ConfigLoader
@@ -18,16 +19,27 @@ private:
     bool m_featureSenseOn = false;
 
     // aimbot
+    int m_aimbotTrigger = 0x0000;
     int m_aimbotSmoothing = 999999;
     int m_aimbotActivationFOV = 0;
-    int m_aimbotTrigger = 0x0000;
+    int m_aimbotMaxRange = 0;
 
     // norecoil
     double m_norecoilPitchStrength = 0;
     double m_norecoilYawStrength = 0;
 
-    void loadFileIntoVector()
+    bool loadFileIntoVector()
     {
+        struct stat result;
+        if (stat(m_fileName.c_str(), &result) == 0)
+        {
+            long modTime = result.st_mtime;
+            bool fileNeedsReload = modTime > m_lastTimeFileEdited;
+            m_lastTimeFileEdited = modTime;
+            if (!fileNeedsReload)
+                return false;
+        }
+
         lines->clear();
         std::string str;
         std::ifstream myFile(m_fileName);
@@ -41,6 +53,7 @@ private:
             lines->push_back(str);
         }
         myFile.close();
+        return true;
     }
 
     void parseLines()
@@ -69,6 +82,7 @@ private:
             m_aimbotTrigger = (lineKey.compare("AIMBOT_TRIGGER") != 0) ? m_aimbotTrigger : stoi(lineValue, 0, 16);
             m_aimbotSmoothing = (lineKey.compare("AIMBOT_SMOOTHING") != 0) ? m_aimbotSmoothing : stoi(lineValue);
             m_aimbotActivationFOV = (lineKey.compare("AIMBOT_ACTIVATION_FOV") != 0) ? m_aimbotActivationFOV : stoi(lineValue);
+            m_aimbotMaxRange = (lineKey.compare("AIMBOT_MAX_RANGE") != 0) ? m_aimbotMaxRange : stoi(lineValue);
             // norecoil
             m_norecoilPitchStrength = (lineKey.compare("NORECOIL_PITCH_STRENGTH") != 0) ? m_norecoilPitchStrength : stod(lineValue);
             m_norecoilYawStrength = (lineKey.compare("NORECOIL_YAW_STRENGTH") != 0) ? m_norecoilYawStrength : stod(lineValue);
@@ -77,7 +91,7 @@ private:
 
     void print()
     {
-        printf("=== SETTINGS LOADED ===\n");
+        printf("\n======================== SETTINGS LOADED ========================\n");
 
         printf("FEATURE_AIMBOT_ON \t\t%s\n", m_featureAimbotOn ? "true" : "false");
         printf("FEATURE_NORECOIL_ON \t\t%s\n", m_featureNoRecoilOn ? "true" : "false");
@@ -86,17 +100,27 @@ private:
         printf("AIMBOT_TRIGGER \t\t\t%d\n", m_aimbotTrigger);
         printf("AIMBOT_SMOOTHING \t\t%d\n", m_aimbotSmoothing);
         printf("AIMBOT_ACTIVATION_FOV \t\t%d\n", m_aimbotActivationFOV);
+        printf("AIMBOT_MAX_RANGE \t\t%d\n", m_aimbotMaxRange);
 
         printf("NORECOIL_PITCH_STRENGTH \t%.6f\n", m_norecoilPitchStrength);
         printf("NORECOIL_YAW_STRENGTH \t\t%.6f\n", m_norecoilYawStrength);
+
+        printf("=================================================================\n\n");
     }
 
 public:
     ConfigLoader()
     {
-        loadFileIntoVector();
-        parseLines();
-        print();
+        reloadFile();
+    }
+
+    void reloadFile()
+    {
+        if (loadFileIntoVector())
+        {
+            parseLines();
+            print();
+        }
     }
 
     // features
@@ -125,6 +149,10 @@ public:
     int getAimbotActivationFOV()
     {
         return m_aimbotActivationFOV;
+    }
+    int getAimbotMaxRange()
+    {
+        return m_aimbotMaxRange;
     }
 
     // norecoil
