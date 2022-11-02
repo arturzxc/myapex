@@ -1,3 +1,5 @@
+//season 15 offset update
+
 #pragma once
 namespace offsets
 {
