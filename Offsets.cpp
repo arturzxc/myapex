@@ -1,11 +1,11 @@
-//season 15 offset update
-// 15/11/22
+//season 15 offset update 1/122/22 https://pastebin.com/3HXatsNu
+
 #pragma once
 namespace offsets
 {
     // buttons
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const long IN_ATTACK = 0x07640a70; // [Buttons] -> in_attack
+    const long IN_ATTACK = 0x07642a70; // [Buttons] -> in_attack
     // core
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long REGION = 0x140000000;     // [Mine]          -> Region
