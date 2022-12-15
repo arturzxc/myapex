@@ -1,17 +1,17 @@
-//season 15 offset update 1/122/22 https://pastebin.com/3HXatsNu
+//season 15 offset update 15/12/22 https://pastebin.com/xdazEV4u
 
 #pragma once
 namespace offsets
 {
     // buttons
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const long IN_ATTACK = 0x07642a70; // [Buttons] -> in_attack
+    const long IN_ATTACK = 0x07642bd0; // [Buttons] -> in_attack
     // core
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long REGION = 0x140000000;     // [Mine]          -> Region
-    const long LEVEL = 0x1432a28;        // [Miscellaneous] -> LevelName
-    const long LOCAL_PLAYER = 0x1ebf488; // [Miscellaneous] -> LocalPlayer
-    const long ENTITY_LIST = 0x1b0e678;  // [Miscellaneous] -> cl_entitylist
+    const long LEVEL = 0x1432ac8;        // [Miscellaneous] -> LevelName
+    const long LOCAL_PLAYER = 0x1ebf528; // [Miscellaneous] -> LocalPlayer
+    const long ENTITY_LIST = 0x1b0e718;  // [Miscellaneous] -> cl_entitylist
     // entity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long LOCAL_ORIGIN = 0x0158; // [DataMap.CBaseViewModel]    -> m_localOrigin
