@@ -70,21 +70,14 @@ public:
         if (m_level->isTrainingArea())
         {
             printf("X:%.6f \t Y: %.6f \t Z:%.6f \n", m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), m_localPlayer->getLocationZ());
-            double distanceToTarget = math::calculateDistanceInMeters(m_localPlayer->getLocationX(),
-                                                                      m_localPlayer->getLocationY(),
-                                                                      m_localPlayer->getLocationZ(),
-                                                                      31518,
-                                                                      -6712,
-                                                                      -29235);
-            if (distanceToTarget > m_configLoader->getAimbotMaxRange())
-                return;
             const float dummyX = 31408.732422;
             const float dummyY = -6711.955566;
             const float dummyZ = -29234.839844;
-            desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(), m_localPlayer->getLocationY(),
-                                                      dummyX, dummyY);
-            desiredViewAnglePitch = calculateDesiredPitch(m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), m_localPlayer->getLocationZ(),
-                                                          dummyX, dummyY, dummyZ);
+            double distanceToTarget = math::calculateDistanceInMeters(m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), m_localPlayer->getLocationZ(), dummyX, dummyY, dummyZ);
+            if (distanceToTarget > m_configLoader->getAimbotMaxRange())
+                return;
+            desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), dummyX, dummyY);
+            desiredViewAnglePitch = calculateDesiredPitch(m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), m_localPlayer->getLocationZ(), dummyX, dummyY, dummyZ);
         }
         else
         {
