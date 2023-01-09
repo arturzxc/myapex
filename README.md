@@ -71,6 +71,18 @@ UPDATE[0] OK.
 ### Why nothing is working!
 Check your settings and make sure the features you want to use are set to true but if that doesn't work then the offsets might need an update. For any devs out there, please feel free to create pull requests for offset updates.
 
+
+### Why aimbot is not working!?
+Aimbot is disabled by default. If you want it to work then edit myapex.ini and set it to true.
+
+### I am getting "... fatal error: X11/Xlib.h ... "
+You are missing X11 library for linux. On ubuntu based distros, you can install it with the command below
+
+```
+sudo apt install libx11-dev
+```
+
+
 ### Segmentation fault!
 Offsets need an update
 
