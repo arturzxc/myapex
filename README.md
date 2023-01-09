@@ -66,8 +66,18 @@ UPDATE[1000] OK.
 UPDATE[0] OK. 
 ```
 
+# FAQ
 
+### Why nothing is working!
+Check your settings and make sure the features you want to use are set to true but if that doesn't work then the offsets might need an update. For any devs out there, please feel free to create pull requests for offset updates.
 
+### Segmentation fault!
+Offsets need an update
+
+### "The client is not running the anti-cheating system, bla bla errors..."
+This has nothing to do with the cheat but rather linux/steam/apex installation.
+Make sure you have the "Proton EasyAntiCheat Runtime" installed on Steam.
+There are times that even if you have the above installed, it still has issues. This is due to linux libraries being outdated. I personally suggest you install Steam via Flatpak to avoid any problem with libraries.
 
 
 
