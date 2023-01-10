@@ -1,4 +1,4 @@
-//season 15 offset update 10/01/23 https://pastebin.com/00GRLAtL and https://www.unknowncheats.me/forum/3651925-post11373.html
+//season 15 offset update 10/01/23 https://pastebin.com/00GRLAtL
 
 #pragma once
 namespace offsets
@@ -9,8 +9,8 @@ namespace offsets
     // core
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long REGION = 0x140000000;     // [Mine]          -> Region
-    const long LEVEL = 0x1432ac8;        // [Miscellaneous] -> LevelName
-    const long LOCAL_PLAYER = 0x77327C0; // [Miscellaneous] -> LocalPlayer
+    const long LEVEL = 0x1449F00;        // [Miscellaneous] -> LevelName
+    const long LOCAL_PLAYER = (0x1EDB670 + 0x8); // [Miscellaneous] -> LocalPlayer
     const long ENTITY_LIST = 0x1b2a578;  // [Miscellaneous] -> cl_entitylist
     // entity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,7 +22,7 @@ namespace offsets
     const long TEAM_NUMBER = 0x044c;                // [RecvTable.DT_BaseEntity]        -> m_iTeamNum
     const long NAME = 0x0589;                       // [RecvTable.DT_BaseEntity]        -> m_iName
     const long LIFE_STATE = 0x0798;                 // [RecvTable.DT_Player]            -> m_lifeState
-    const long VEC_PUNCH_WEAPON_ANGLE = 0x2488;     // [DataMap.C_Player]               -> m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
+    const long VEC_PUNCH_WEAPON_ANGLE = 0x2490;     // [DataMap.C_Player]               -> m_currentFrameLocalPlayer.m_vecPunchWeapon_Angle
     const long VIEW_ANGLE = (0x25a4 - 0x14);        // [DataMap.C_Player]               -> m_ammoPoolCapacity - 0x14
     const long BLEEDOUT_STATE = 0x2738;             // [RecvTable.DT_Player]            -> m_bleedoutState
     const long ZOOMING = 0x1c51;                    // [RecvTable.DT_Player]            -> m_bZooming
