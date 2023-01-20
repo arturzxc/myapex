@@ -81,7 +81,7 @@ public:
         }
         else
         {
-            if (m_lockedOnPlayer == nullptr)
+            if (m_lockedOnPlayer == nullptr || !m_lockedOnPlayer->isVisible())
                 m_lockedOnPlayer = findClosestEnemy();
             if (m_lockedOnPlayer == nullptr)
                 return;
