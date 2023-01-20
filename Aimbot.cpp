@@ -6,6 +6,7 @@
 #include "Level.cpp"
 #include "math.h"
 #include "X11Utils.cpp"
+#include "ConfigLoader.cpp"
 
 class Aimbot
 {
