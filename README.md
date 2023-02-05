@@ -23,7 +23,7 @@ Only works horizontally.
 1. Open terminal and run the following to download the cheat source code
 
 ```
-git clone https://github.com/arturzxc/myapex.git
+git clone https://github.com/leonardovac/myapex/
 ```
 
 2. Go inside the downloaded folder
