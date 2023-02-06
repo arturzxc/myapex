@@ -49,17 +49,17 @@ public:
             {
                 player->setGlowEnable(1);
                 player->setGlowThroughWall(2);
-                player->setGlowColorRed(20);
-                player->setGlowColorGreen(254);
-                player->setGlowColorBlue(20);
+                player->setGlowColorRed(2);
+                player->setGlowColorGreen(25);
+                player->setGlowColorBlue(2);
             }
             else
             {
                 player->setGlowEnable(1);
                 player->setGlowThroughWall(2);
-                player->setGlowColorRed(254);
-                player->setGlowColorGreen(20);
-                player->setGlowColorBlue(20);
+                player->setGlowColorRed(25);
+                player->setGlowColorGreen(2);
+                player->setGlowColorBlue(2);
             }
         }
     }
