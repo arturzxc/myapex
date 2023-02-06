@@ -39,16 +39,27 @@ public:
             if (!player->isValid())
                 continue;
             if (player->getTeamNumber() == m_localPlayer->getTeamNumber())
+            {
+                player->setGlowColorRed(2);
+                player->setGlowColorGreen(2);
+                player->setGlowColorBlue(10);
                 continue;
+            }
             if (player->isVisible())
             {
-                player->setGlowEnable(5);
-                player->setGlowThroughWall(1);
+                player->setGlowEnable(1);
+                player->setGlowThroughWall(2);
+                player->setGlowColorRed(20);
+                player->setGlowColorGreen(254);
+                player->setGlowColorBlue(20);
             }
             else
             {
-                player->setGlowEnable(7);
+                player->setGlowEnable(1);
                 player->setGlowThroughWall(2);
+                player->setGlowColorRed(254);
+                player->setGlowColorGreen(20);
+                player->setGlowColorBlue(20);
             }
         }
     }

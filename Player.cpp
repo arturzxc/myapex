@@ -121,6 +121,44 @@ public:
         long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
         mem::WriteInt(ptrLong, glowThroughWall);
     }
+    int getGlowColorRed()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::GLOW_COLOR;
+        int result = mem::ReadInt(ptrLong);
+        return result;
+    }
+    void setGlowColorRed(float color)
+    {
+        if (color > 255)
+            color = 255;
+        if (color < 0)
+            color = 0;
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::GLOW_COLOR;
+        mem::WriteFloat(ptrLong, color);
+    }
+    void setGlowColorGreen(float color)
+    {
+        if (color > 255)
+            color = 255;
+        if (color < 0)
+            color = 0;
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::GLOW_COLOR + sizeof(float);
+        mem::WriteFloat(ptrLong, color);
+    }
+    void setGlowColorBlue(float color)
+    {
+        if (color > 255)
+            color = 255;
+        if (color < 0)
+            color = 0;
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::GLOW_COLOR + sizeof(float) + sizeof(float);
+        ;
+        mem::WriteFloat(ptrLong, color);
+    }
     float getLastVisibleTime()
     {
         long basePointer = getBasePointer();
