@@ -87,12 +87,4 @@ public:
         }
     }
 
-    int minMaxShields(int val)
-    {
-        if (val <= 0)
-            return 1;
-        if (val <= 50)
-            return 10;
-        return 25;
-    }
 };
