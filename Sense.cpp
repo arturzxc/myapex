@@ -39,28 +39,60 @@ public:
             if (!player->isValid())
                 continue;
             if (player->getTeamNumber() == m_localPlayer->getTeamNumber())
-            {
-                player->setGlowColorRed(2);
-                player->setGlowColorGreen(2);
-                player->setGlowColorBlue(10);
                 continue;
-            }
+
             if (player->isVisible())
             {
                 player->setGlowEnable(1);
-                player->setGlowThroughWall(2);
-                player->setGlowColorRed(2);
-                player->setGlowColorGreen(25);
-                player->setGlowColorBlue(2);
+                player->setGlowThroughWall(1);
+                player->setGlowColorRed(0);
+                player->setGlowColorGreen(3);
+                player->setGlowColorBlue(0);
             }
             else
             {
+                const int enemyShields = player->getShieldsValue();
+                int r, g, b;
+                if (enemyShields >= 120)
+                {
+                    r = 3;
+                    g = 0;
+                    b = 0;
+                }
+                else if (enemyShields >= 100)
+                {
+                    r = 1.5;
+                    g = 0;
+                    b = 1.5;
+                }
+                else if (enemyShields >= 75)
+                {
+                    r = 0;
+                    g = 1;
+                    b = 2;
+                }
+                else
+                {
+                    r = 1;
+                    g = 1;
+                    b = 1;
+                }
+
                 player->setGlowEnable(1);
-                player->setGlowThroughWall(2);
-                player->setGlowColorRed(25);
-                player->setGlowColorGreen(2);
-                player->setGlowColorBlue(2);
+                player->setGlowThroughWall(1);
+                player->setGlowColorRed(r);
+                player->setGlowColorGreen(g);
+                player->setGlowColorBlue(b);
             }
         }
+    }
+
+    int minMaxShields(int val)
+    {
+        if (val <= 0)
+            return 1;
+        if (val <= 50)
+            return 10;
+        return 25;
     }
 };

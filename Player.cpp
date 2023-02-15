@@ -95,6 +95,13 @@ public:
         int result = mem::ReadInt(ptrLong);
         return result;
     }
+    int getShieldsValue()
+    {
+        long basePointer = getBasePointer();
+        long ptrLong = basePointer + offsets::CURRENT_SHIELDS;
+        int result = mem::ReadInt(ptrLong);        
+        return result;
+    }
     int getGlowEnable()
     {
         long basePointer = getBasePointer();
@@ -130,8 +137,8 @@ public:
     }
     void setGlowColorRed(float color)
     {
-        if (color > 255)
-            color = 255;
+        if (color > 100)
+            color = 100;
         if (color < 0)
             color = 0;
         long basePointer = getBasePointer();
@@ -140,8 +147,8 @@ public:
     }
     void setGlowColorGreen(float color)
     {
-        if (color > 255)
-            color = 255;
+        if (color > 100)
+            color = 100;
         if (color < 0)
             color = 0;
         long basePointer = getBasePointer();
@@ -150,8 +157,8 @@ public:
     }
     void setGlowColorBlue(float color)
     {
-        if (color > 255)
-            color = 255;
+        if (color > 100)
+            color = 100;
         if (color < 0)
             color = 0;
         long basePointer = getBasePointer();
