@@ -30,7 +30,7 @@ public:
 
     bool isValid()
     {
-        return getBasePointer() > 0 && getSignifierName().compare("player") == 0;
+        return getBasePointer() > 0 && !isDead();
     }
 
     bool isDead()

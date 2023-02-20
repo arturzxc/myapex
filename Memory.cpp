@@ -62,7 +62,7 @@ namespace mem
     T ReadMemory(long address)
     {
         T buffer = T();
-        
+
         // Prepare the iovec structures
         struct iovec local_iov = {&buffer, sizeof(T)};
         struct iovec remote_iov = {reinterpret_cast<void *>(address), sizeof(T)};
@@ -79,7 +79,7 @@ namespace mem
             {
                 // Get the error code from errno and log it
                 int error_code = errno;
-                printf("ERROR: ReadMemory failed. MemoryAddress: %ld ErrorCode:%d", address, error_code);
+                throw std::invalid_argument("ERROR: ReadMemory failed.");
             }
         }
         return buffer;
