@@ -18,7 +18,7 @@ private:
     long getBasePointer()
     {
         if (m_basePointer == 0)
-            m_basePointer = mem::ReadLong(getUnresolvedBasePointer());
+            m_basePointer = mem::ReadMemory<long>(getUnresolvedBasePointer());
         return m_basePointer;
     }
 
@@ -27,24 +27,35 @@ public:
     {
         m_entityListIndex = entityListIndex;
     }
-    void markForPointerResolution()
+
+    bool isValid()
     {
-        m_basePointer = 0;
+        return getBasePointer() > 0 && getSignifierName().compare("player") == 0;
     }
+
     bool isDead()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LIFE_STATE;
-        short result = mem::ReadShort(ptrLong);
+        short result = mem::ReadMemory<short>(ptrLong);
         return result > 0;
     }
+
     bool isKnocked()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::BLEEDOUT_STATE;
-        short result = mem::ReadShort(ptrLong);
+        short result = mem::ReadMemory<short>(ptrLong);
         return result > 0;
     }
+    bool isVisible()
+    {
+        const float lastVisibleTime = getLastVisibleTime();
+        const bool isVisible = lastVisibleTime > m_lastVisibleTime;
+        m_lastVisibleTime = lastVisibleTime;
+        return isVisible;
+    }
+
     std::string getName()
     {
         long basePointer = getBasePointer();
@@ -52,89 +63,85 @@ public:
         std::string result = mem::ReadString(ptrLong);
         return result;
     }
-    bool isValid()
-    {
-        return getBasePointer() > 0 && !isDead();
-    }
-    std::string getInvalidReason()
-    {
-        if (getBasePointer() == 0)
-            return "Unresolved base pointer";
-        else if (isDead())
-            return "Player is dead";
-        else if (getName().empty())
-            return "Name is empty";
-        else
-            return "Player is valid";
-    }
+
     float getLocationX()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN;
-        float result = mem::ReadFloat(ptrLong);
+        float result = mem::ReadMemory<float>(ptrLong);
         return result;
     }
+
     float getLocationY()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float);
-        float result = mem::ReadFloat(ptrLong);
+        float result = mem::ReadMemory<float>(ptrLong);
         return result;
     }
+
     float getLocationZ()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LOCAL_ORIGIN + sizeof(float) + sizeof(float);
-        float result = mem::ReadFloat(ptrLong);
+        float result = mem::ReadMemory<float>(ptrLong);
         return result;
     }
+
     int getTeamNumber()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::TEAM_NUMBER;
-        int result = mem::ReadInt(ptrLong);
+        int result = mem::ReadMemory<int>(ptrLong);
         return result;
     }
+
     int getShieldsValue()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::CURRENT_SHIELDS;
-        int result = mem::ReadInt(ptrLong);        
+        int result = mem::ReadMemory<int>(ptrLong);
         return result;
     }
+
     int getGlowEnable()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_ENABLE;
-        int result = mem::ReadInt(ptrLong);
+        int result = mem::ReadMemory<int>(ptrLong);
         return result;
     }
+
     void setGlowEnable(int glowEnable)
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_ENABLE;
-        mem::WriteInt(ptrLong, glowEnable);
+        mem::WriteMemory<int>(ptrLong, glowEnable);
     }
+
     int getGlowThroughWall()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
-        int result = mem::ReadInt(ptrLong);
+        int result = mem::ReadMemory<int>(ptrLong);
         return result;
     }
+
     void setGlowThroughWall(int glowThroughWall)
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_THROUGH_WALL;
-        mem::WriteInt(ptrLong, glowThroughWall);
+        mem::WriteMemory<int>(ptrLong, glowThroughWall);
     }
+
     int getGlowColorRed()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_COLOR;
-        int result = mem::ReadInt(ptrLong);
+        int result = mem::ReadMemory<int>(ptrLong);
         return result;
     }
+
     void setGlowColorRed(float color)
     {
         if (color > 100)
@@ -143,8 +150,9 @@ public:
             color = 0;
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_COLOR;
-        mem::WriteFloat(ptrLong, color);
+        mem::WriteMemory<float>(ptrLong, color);
     }
+
     void setGlowColorGreen(float color)
     {
         if (color > 100)
@@ -153,8 +161,9 @@ public:
             color = 0;
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_COLOR + sizeof(float);
-        mem::WriteFloat(ptrLong, color);
+        mem::WriteMemory<float>(ptrLong, color);
     }
+
     void setGlowColorBlue(float color)
     {
         if (color > 100)
@@ -164,37 +173,30 @@ public:
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::GLOW_COLOR + sizeof(float) + sizeof(float);
         ;
-        mem::WriteFloat(ptrLong, color);
+        mem::WriteMemory<float>(ptrLong, color);
     }
+
     float getLastVisibleTime()
     {
         long basePointer = getBasePointer();
         long ptrLong = basePointer + offsets::LAST_VISIBLE_TIME;
-        float result = mem::ReadFloat(ptrLong);
+        float result = mem::ReadMemory<float>(ptrLong);
         return result;
     }
-    bool isVisible()
+
+    std::string getSignifierName()
     {
-        const float lastVisibleTime = getLastVisibleTime();
-        const bool isVisible = lastVisibleTime > m_lastVisibleTime;
-        m_lastVisibleTime = lastVisibleTime;
-        return isVisible;
-    }
-    void print()
-    {
-        std::cout << "Player[" + std::to_string(m_entityListIndex) + "]:\n";
-        std::cout << "\tUnresolvedBasePointer:\t\t\t" + mem::convertPointerToHexString(getUnresolvedBasePointer()) + "\n";
-        std::cout << "\tBasePointer:\t\t\t\t" + mem::convertPointerToHexString(getBasePointer()) + "\n";
-        std::cout << "\tIsValid:\t\t\t\t" + std::to_string(isValid()) + "\n";
-        std::cout << "\tInvalidReason:\t\t\t\t" + getInvalidReason() + "\n";
-        if (!isValid())
+        try
         {
-            std::cout << "\tLocationOriginX:\t\t\t" + utils::convertNumberToString(getLocationX()) + "\n";
-            std::cout << "\tLocationOriginY:\t\t\t" + utils::convertNumberToString(getLocationY()) + "\n";
-            std::cout << "\tLocationOriginZ:\t\t\t" + utils::convertNumberToString(getLocationZ()) + "\n";
-            std::cout << "\tTeamNumber:\t\t\t\t" + utils::convertNumberToString(getTeamNumber()) + "\n";
-            std::cout << "\tGlowEnable:\t\t\t\t" + utils::convertNumberToString(getGlowEnable()) + "\n";
-            std::cout << "\tGlowThroughWall:\t\t\t" + utils::convertNumberToString(getGlowThroughWall()) + "\n";
+            long basePointer = getBasePointer();
+            long sigOff = offsets::SIGNIFIER_NAME;
+            long sigPointer = mem::ReadMemory<long>(basePointer + sigOff);
+            return mem::ReadString(sigPointer);
+        }
+        catch (...)
+        {
+            return "";
         }
     }
+    
 };

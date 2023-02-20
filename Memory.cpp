@@ -3,6 +3,7 @@
 #include <sstream>
 #include <sys/uio.h>
 #include <math.h>
+#include <errno.h>
 
 namespace mem
 {
@@ -20,6 +21,7 @@ namespace mem
         m_pid = pid;
         return pid;
     }
+
     bool Read(long address, void *pBuff, size_t size)
     {
         if (size == 0)
@@ -45,31 +47,7 @@ namespace mem
             return false;
         return false;
     }
-    bool Write(long address, void *pBuff, size_t size)
-    {
-        if (size == 0)
-            return false;
-        void *pAddress = (void *)address;
-        pid_t pid = GetPID();
-        struct iovec iovLocalAddressSpace[1]{0};
-        struct iovec iovRemoteAddressSpace[1]{0};
-        iovLocalAddressSpace[0].iov_base = pBuff;     // Store data in this buffer
-        iovLocalAddressSpace[0].iov_len = size;       // which has this size.
-        iovRemoteAddressSpace[0].iov_base = pAddress; // The data will be writted here
-        iovRemoteAddressSpace[0].iov_len = size;      // and has this size.
-        ssize_t sSize = process_vm_writev(
-            pid,                   // Remote process id
-            iovLocalAddressSpace,  // Local iovec array
-            1,                     // Size of the local iovec array
-            iovRemoteAddressSpace, // Remote iovec array
-            1,                     // Size of the remote iovec array
-            0);                    // Flags, unused
-        if (sSize == (ssize_t)size)
-            return true;
-        else if (sSize == 0)
-            return false;
-        return false;
-    }
+
     std::string ReadString(long address)
     {
         int size = sizeof(std::string);
@@ -79,79 +57,58 @@ namespace mem
             throw new std::invalid_argument("Failed to read String at address: " + address);
         return std::string(buffer);
     }
-    short ReadShort(long address)
+
+    template <typename T>
+    T ReadMemory(long address)
     {
-        int size = sizeof(short);
-        short buffer;
-        bool success = Read(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to read short at address: " + address);
+        T buffer = T();
+        
+        // Prepare the iovec structures
+        struct iovec local_iov = {&buffer, sizeof(T)};
+        struct iovec remote_iov = {reinterpret_cast<void *>(address), sizeof(T)};
+
+        // Get the process ID of the current process
+        pid_t pid = GetPID();
+
+        // Read the memory using process_vm_readv
+        ssize_t bytes_read = process_vm_readv(pid, &local_iov, 1, &remote_iov, 1, 0);
+        if (bytes_read != sizeof(T))
+        {
+            // Error occurred while reading the memory
+            if (bytes_read == -1)
+            {
+                // Get the error code from errno and log it
+                int error_code = errno;
+                printf("ERROR: ReadMemory failed. MemoryAddress: %ld ErrorCode:%d", address, error_code);
+            }
+        }
         return buffer;
     }
-    void WriteShort(long address, short num)
+
+    template <typename T>
+    bool WriteMemory(long address, const T &value)
     {
-        int size = sizeof(short);
-        short buffer = num;
-        bool success = Write(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to write short at address: " + address);
+        // Prepare the iovec structures
+        struct iovec local_iov = {const_cast<T *>(&value), sizeof(T)};
+        struct iovec remote_iov = {reinterpret_cast<void *>(address), sizeof(T)};
+
+        // Get the process ID of the current process
+        pid_t pid = GetPID();
+
+        // Write the memory using process_vm_writev
+        ssize_t bytes_written = process_vm_writev(pid, &local_iov, 1, &remote_iov, 1, 0);
+        if (bytes_written != sizeof(T))
+        {
+            // Error occurred while writing the memory
+            if (bytes_written == -1)
+            {
+                // Get the error code from errno and log it
+                int error_code = errno;
+                printf("ERROR: WriteMemory failed. MemoryAddress: %ld ErrorCode:%d", address, error_code);
+            }
+            return false;
+        }
+        return true;
     }
-    int ReadInt(long address)
-    {
-        int size = sizeof(int);
-        int buffer;
-        bool success = Read(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to read int at address: " + address);
-        return buffer;
-    }
-    void WriteInt(long address, int num)
-    {
-        int size = sizeof(int);
-        int buffer = num;
-        bool success = Write(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to write int at address: " + address);
-    }
-    float ReadFloat(long address)
-    {
-        int size = sizeof(float);
-        float buffer;
-        bool success = Read(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to read float at address: " + address);
-        return buffer;
-    }
-    void WriteFloat(long address, float num)
-    {
-        int size = sizeof(float);
-        float buffer = num;
-        bool success = Write(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to write float at address: " + address);
-    }
-    long ReadLong(long address)
-    {
-        int size = sizeof(long);
-        long buffer;
-        bool success = Read(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to read long at address: " + address);
-        return buffer;
-    }
-    void WriteLong(long address, long num)
-    {
-        int size = sizeof(long);
-        long buffer = num;
-        bool success = Write(address, &buffer, size);
-        if (!success)
-            throw new std::invalid_argument("Failed to write long at address: " + address);
-    }
-    std::string convertPointerToHexString(long pointer)
-    {
-        std::stringstream stream;
-        stream << "0x" << std::hex << pointer;
-        std::string result(stream.str());
-        return result;
-    }
+
 }

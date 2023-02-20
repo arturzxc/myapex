@@ -1,5 +1,3 @@
-// Updated: 2023-02-06
-
 #pragma once
 namespace offsets
 {
@@ -14,7 +12,8 @@ namespace offsets
     const long ENTITY_LIST = 0x1b37938;           // [Miscellaneous] -> cl_entitylist
     // entity
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    const long LOCAL_ORIGIN = 0x0158; // [DataMap.CBaseViewModel]    -> m_localOrigin
+    const long LOCAL_ORIGIN = 0x0158;   // [DataMap.CBaseViewModel]    -> m_localOrigin
+    const long SIGNIFIER_NAME = 0x0580; // [RecvTable.DT_PropSurvival] -> m_iSignifierName
     // player
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     const long GLOW_ENABLE = (0x03c0 + 0x8);        // [RecvTable.DT_HighlightSettings] -> m_highlightServerContextID + 0x8
@@ -28,5 +27,5 @@ namespace offsets
     const long BLEEDOUT_STATE = 0x2740;             // [RecvTable.DT_Player]            -> m_bleedoutState
     const long ZOOMING = 0x1c51;                    // [RecvTable.DT_Player]            -> m_bZooming
     const long LAST_VISIBLE_TIME = 0x1A78;          // [Miscellaneous]                  -> CPlayer!lastVisibleTime
-    const long CURRENT_SHIELDS = 0x0170;             // m_shieldHealth
+    const long CURRENT_SHIELDS = 0x0170;            // m_shieldHealth
 }

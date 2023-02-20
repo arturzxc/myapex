@@ -29,14 +29,18 @@ public:
         m_players = players;
         m_x11Utils = x11Utils;
     }
+
     void update()
     {
         if (!m_level->isPlayable())
             return;
+
         for (int i = 0; i < m_players->size(); i++)
         {
             Player *player = m_players->at(i);
             if (!player->isValid())
+                continue;
+            if (player->isDead())
                 continue;
             if (player->getTeamNumber() == m_localPlayer->getTeamNumber())
                 continue;
@@ -46,36 +50,37 @@ public:
                 player->setGlowEnable(1);
                 player->setGlowThroughWall(1);
                 player->setGlowColorRed(0);
-                player->setGlowColorGreen(3);
+                player->setGlowColorGreen(10);
                 player->setGlowColorBlue(0);
             }
             else
             {
                 const int enemyShields = player->getShieldsValue();
                 int r, g, b;
+
                 if (enemyShields >= 120)
                 {
-                    r = 3;
+                    r = 10;
                     g = 0;
                     b = 0;
                 }
                 else if (enemyShields >= 100)
                 {
-                    r = 1.5;
+                    r = 10;
                     g = 0;
-                    b = 1.5;
+                    b = 10;
                 }
                 else if (enemyShields >= 75)
                 {
                     r = 0;
-                    g = 1;
-                    b = 2;
+                    g = 10;
+                    b = 10;
                 }
                 else
                 {
-                    r = 1;
-                    g = 1;
-                    b = 1;
+                    r = 10;
+                    g = 10;
+                    b = 10;
                 }
 
                 player->setGlowEnable(1);
@@ -86,5 +91,4 @@ public:
             }
         }
     }
-
 };

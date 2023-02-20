@@ -70,10 +70,9 @@ public:
         double desiredViewAnglePitch = 0;
         if (m_level->isTrainingArea())
         {
-            printf("X:%.6f \t Y: %.6f \t Z:%.6f \n", m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), m_localPlayer->getLocationZ());
-            const float dummyX = 31408.732422;
-            const float dummyY = -6711.955566;
-            const float dummyZ = -29234.839844;
+            const float dummyX = 31450.000000;
+            const float dummyY = -7960.000000;
+            const float dummyZ = -29235.968750;
             double distanceToTarget = math::calculateDistanceInMeters(m_localPlayer->getLocationX(), m_localPlayer->getLocationY(), m_localPlayer->getLocationZ(), dummyX, dummyY, dummyZ);
             if (distanceToTarget > m_configLoader->getAimbotMaxRange())
                 return;
@@ -179,6 +178,7 @@ public:
         for (int i = 0; i < m_players->size(); i++)
         {
             Player *player = m_players->at(i);
+
             if (!player->isValid())
                 continue;
             if (player->isKnocked())
@@ -187,6 +187,7 @@ public:
                 continue;
             if (!player->isVisible())
                 continue;
+
             double desiredViewAngleYaw = calculateDesiredYaw(m_localPlayer->getLocationX(),
                                                              m_localPlayer->getLocationY(),
                                                              player->getLocationX(),
@@ -199,7 +200,6 @@ public:
             }
             else
             {
-
                 if (abs(angleDelta) < closestPlayerAngleSoFar)
                 {
                     closestPlayerSoFar = player;
