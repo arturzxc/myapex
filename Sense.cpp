@@ -43,7 +43,7 @@ public:
 
             if (player->isVisible())
             {
-                player->setGlowEnable(1);
+                player->setGlowEnable(7);
                 player->setGlowThroughWall(1);
                 player->setGlowColorRed(0);
                 player->setGlowColorGreen(3);
@@ -78,7 +78,7 @@ public:
                     b = 1;
                 }
 
-                player->setGlowEnable(1);
+                player->setGlowEnable(7);
                 player->setGlowThroughWall(1);
                 player->setGlowColorRed(r);
                 player->setGlowColorGreen(g);
