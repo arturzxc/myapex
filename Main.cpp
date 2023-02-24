@@ -51,10 +51,12 @@ int main(int argc, char *argv[])
                 configLoader->reloadFile(); // will attempt to reload config if there have been any updates to it
 
             // resolve pointers
+            localPlayer->invalidateCache();
             localPlayer->markForPointerResolution();
             for (int i = 0; i < players->size(); i++)
             {
                 Player *player = players->at(i);
+                player->invalidateCache();
                 player->markForPointerResolution();
             }
 
@@ -71,7 +73,7 @@ int main(int argc, char *argv[])
             // all ran fine
             if (counter % 1000 == 0)
                 printf("UPDATE[%d] OK. \n", counter);
-            std::this_thread::sleep_for(std::chrono::milliseconds(5));
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
         }
         catch (...)
         {
